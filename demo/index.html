@@ -31,14 +31,18 @@
 		var control = L.Control.openCageSearch().addTo(map);
 		var marker;
 
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+		/* -- placeholder for MapBox tiles, for when our account is sorted out!
+		L.tileLayer('http://{s}.tiles.mapbox.com/v3/lokku.i205eb9o/{z}/{x}/{y}.png', {
 		    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
+		*/
+
+		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);
 
 		map.on('click', function(e) {
-			console.log('click');
 			var query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
-			console.log(query);
 			geocoder.geocode(query, function(results) {
 				var r = results[0];
 				if (r) {
