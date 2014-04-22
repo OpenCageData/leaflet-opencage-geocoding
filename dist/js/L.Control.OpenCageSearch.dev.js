@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.0.0 - 2014-04-17
+ * OpenCage Data Search Control v1.0.0 - 2014-04-22
  * Copyright (c) 2014, OpenCage Data (a Lokku brand) 
  * info@opencagedata.com 
  * http://opencagedata.com 
@@ -123,7 +123,7 @@
 		},
 
 		markGeocode: function(result) {
-			this._map.fitBounds(result.bbox);
+			this._map.fitBounds(result.bounds);
 
 			if (this._geocodeMarker) {
 				this._map.removeLayer(this._geocodeMarker);
