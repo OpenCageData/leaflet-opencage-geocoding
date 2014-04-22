@@ -113,7 +113,7 @@
 		},
 
 		markGeocode: function(result) {
-			this._map.fitBounds(result.bbox);
+			this._map.fitBounds(result.bounds);
 
 			if (this._geocodeMarker) {
 				this._map.removeLayer(this._geocodeMarker);
