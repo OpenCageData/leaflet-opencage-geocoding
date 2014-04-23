@@ -27,8 +27,9 @@
 
 	<script type="text/javascript">
 		var map = L.map('map').setView([51.52255, -0.10249], 13);
-		var geocoder = L.Control.OpenCageSearch.geocoder();
-		var control = L.Control.openCageSearch().addTo(map);
+		var key = 'your-api-key-here';
+		var geocoder = L.Control.OpenCageSearch.geocoder(key);
+		var control = L.Control.openCageSearch(key).addTo(map);
 		var marker;
 
 		/* -- placeholder for MapBox tiles, for when our account is sorted out!

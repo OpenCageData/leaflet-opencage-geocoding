@@ -36,7 +36,7 @@
 		initialize: function (options) {
 			L.Util.setOptions(this, options);
 			if (!this.options.geocoder) {
-				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder();
+				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder(this.options.key);
 			}
 		},
 
@@ -255,15 +255,15 @@
 			reverseQueryParams: {}
 		},
 
-		initialize: function(options) {
-			L.Util.setOptions(this, options);
+		initialize: function(key) {
+			this.key = key;
 		},
 
 		geocode: function(query, cb, context) {
 			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
-				limit: 5
-				//format: 'json'
+				limit: 5,
+				key: this.key
 			}, this.options.geocodingQueryParams),
 			function(data) {
 				var results = [];
@@ -285,8 +285,8 @@
 		}
 	});
 
-	L.Control.OpenCageSearch.geocoder = function(options) {
-		return new L.Control.OpenCageSearch.Geocoder(options);
+	L.Control.OpenCageSearch.geocoder = function(key) {
+		return new L.Control.OpenCageSearch.Geocoder(key);
 	};
 
 	return L.Control.OpenCageSearch;
