@@ -28,7 +28,9 @@
 			expand: 'click',
 			position: 'topright',
 			placeholder: 'Search...',
-			errorMessage: 'Nothing found.'
+			errorMessage: 'Nothing found.',
+			key: '',
+			limit: 5
 		},
 
 		_callbackId: 0,
@@ -36,7 +38,7 @@
 		initialize: function (options) {
 			L.Util.setOptions(this, options);
 			if (!this.options.geocoder) {
-				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder(this.options.key);
+				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder(this.options);
 			}
 		},
 
@@ -252,18 +254,20 @@
 		options: {
 			serviceUrl: 'http://prototype.opencagedata.com/geocode/v1/',
 			geocodingQueryParams: {},
-			reverseQueryParams: {}
+			reverseQueryParams: {},
+			key: '',
+			limit: 5
 		},
 
-		initialize: function(key) {
-			this.key = key;
+		initialize: function(options) {
+			L.Util.setOptions(this, options);
 		},
 
 		geocode: function(query, cb, context) {
 			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
-				limit: 5,
-				key: this.key
+				limit: this.options.limit,
+				key: this.options.key
 			}, this.options.geocodingQueryParams),
 			function(data) {
 				var results = [];
