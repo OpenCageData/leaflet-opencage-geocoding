@@ -289,8 +289,8 @@
 		}
 	});
 
-	L.Control.OpenCageSearch.geocoder = function(key) {
-		return new L.Control.OpenCageSearch.Geocoder(key);
+	L.Control.OpenCageSearch.geocoder = function(options) {
+		return new L.Control.OpenCageSearch.Geocoder(options);
 	};
 
 	return L.Control.OpenCageSearch;

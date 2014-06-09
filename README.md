@@ -18,7 +18,11 @@ Add the plugin's control to an `L.Map` instance:
 
 ```javascript
 var map = L.map('map').setView([51.52255, -0.10249], 13);
-var control = L.Control.openCageSearch().addTo(map);
+var options = {
+	key: 'your-api-key-here',
+	limit: 10
+};
+var control = L.Control.openCageSearch(options).addTo(map);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
