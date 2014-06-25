@@ -1,0 +1,27 @@
+{
+  "name": "Leaflet.OpenCage.Search",
+  "version": "1.0.0",
+  "homepage": "http://geocoder.opencagedata.com/code.html",
+  "authors": [
+    "info@opencagedata.com"
+  ],
+  "description": "A Leaflet search control that uses OpenCage Data's geocoder",
+  "main": "dist/js/L.Control.OpenCageSearch.min.js",
+  "keywords": [
+    "leaflet",
+    "plugin",
+    "geocoding",
+    "search",
+    "map",
+    "opencage",
+    "opencagedata"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
