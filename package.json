@@ -6,11 +6,11 @@
     "type": "git",
     "url": "git@github.com:lokku/leaflet-opencage-search.git"
   },
-  "homepage": "http://opencagedata.com/geocoder/tools/leaflet-plugin/",
+  "homepage": "http://geocoder.opencagedata.com/code.html",
   "author": {
     "name": "OpenCage Data (a Lokku brand)",
     "email": "info@opencagedata.com",
-    "url": "http://opencagedata.com"
+    "url": "http://geocoder.opencagedata.com"
   },
   "license": "BSD",
   "keywords": [

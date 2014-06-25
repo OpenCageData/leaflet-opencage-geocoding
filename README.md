@@ -1,9 +1,15 @@
 # OpenCage Data Search and Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) search control that uses [OpenCage Data's](http://www.opencagedata.com/)
+A [Leaflet](http://leafletjs.com/) search control that uses [OpenCage Data's](http://geocoder.opencagedata.com/)
 geocoder.
 
-To see the plugin in action, take a look at the [demo](http://opencagedata.com/geocoder/demo).
+To see the plugin in action, take a look at the [demo](http://geocoder.opencagedata.com/code/leaflet-demo.html).
+
+## Installation
+
+Clone from GitHub: `git@github.com:lokku/leaflet-opencage-search.git`.
+
+Install with Bower: `bower install Leaflet.OpenCage.Search`.
 
 ## Usage
 
