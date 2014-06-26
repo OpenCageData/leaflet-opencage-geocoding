@@ -9,7 +9,20 @@ To see the plugin in action, take a look at the [demo](http://geocoder.opencaged
 
 Clone from GitHub: `git@github.com:lokku/leaflet-opencage-search.git`.
 
-Install with Bower: `bower install Leaflet.OpenCage.Search`.
+Install with Bower: `$ bower install Leaflet.OpenCage.Search`.
+
+Download a [zip or tarball archive](https://github.com/lokku/leaflet-opencage-search/releases) from GitHub.
+
+## Configuration
+
+The control uses two image files that it expects to find in a directory with
+a path relative to the control's CSS files as `../images`. If you've installed
+the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Search/dist/images/`. If you've
+cloned the control's GitHub repository or downloaded and unpacked an archive
+from GitHub, you'll find these in 'dist/images'.
+
+Whichever installation method you've chosen, you'll need to move a copy of these
+two image files to a directory relative to the location of the control's CSS files.
 
 ## Usage
 

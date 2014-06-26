@@ -252,7 +252,7 @@
 
 	L.Control.OpenCageSearch.Geocoder = L.Class.extend({
 		options: {
-			serviceUrl: 'http://prototype.opencagedata.com/geocode/v1/',
+			serviceUrl: 'https://api.opencagedata.com/geocode/v1/',
 			geocodingQueryParams: {},
 			reverseQueryParams: {},
 			key: '',

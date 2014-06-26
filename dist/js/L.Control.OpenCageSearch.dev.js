@@ -1,11 +1,11 @@
 /* 
- * OpenCage Data Search Control v1.0.0 - 2014-04-28
+ * OpenCage Data Search Control v1.0.0 - 2014-06-26
  * Copyright (c) 2014, OpenCage Data (a Lokku brand) 
  * info@opencagedata.com 
- * http://opencagedata.com 
+ * http://geocoder.opencagedata.com 
  * 
  * Licensed under the BSD license. 
- * Demo: http://opencagedata.com/geocoder/tools/leaflet-plugin/ 
+ * Demo: http://geocoder.opencagedata.com/code.html 
  * Source: git@github.com:lokku/leaflet-opencage-search.git 
  */
 (function (factory) {
@@ -262,7 +262,7 @@
 
 	L.Control.OpenCageSearch.Geocoder = L.Class.extend({
 		options: {
-			serviceUrl: 'http://prototype.opencagedata.com/geocode/v1/',
+			serviceUrl: 'https://api.opencagedata.com/geocode/v1/',
 			geocodingQueryParams: {},
 			reverseQueryParams: {},
 			key: '',
@@ -299,8 +299,8 @@
 		}
 	});
 
-	L.Control.OpenCageSearch.geocoder = function(key) {
-		return new L.Control.OpenCageSearch.Geocoder(key);
+	L.Control.OpenCageSearch.geocoder = function(options) {
+		return new L.Control.OpenCageSearch.Geocoder(options);
 	};
 
 	return L.Control.OpenCageSearch;
