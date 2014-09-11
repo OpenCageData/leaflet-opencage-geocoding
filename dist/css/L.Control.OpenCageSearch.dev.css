@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.0.0 - 2014-06-26
+ * OpenCage Data Search Control v1.0.1 - 2014-09-11
  * Copyright (c) 2014, OpenCage Data (a Lokku brand) 
  * info@opencagedata.com 
  * http://geocoder.opencagedata.com 

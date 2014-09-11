@@ -35,18 +35,15 @@
 		var control = L.Control.openCageSearch(options).addTo(map);
 		var marker;
 
-		/* -- placeholder for MapBox tiles, for when our account is sorted out!
-		L.tileLayer('http://{s}.tiles.mapbox.com/v3/lokku.i205eb9o/{z}/{x}/{y}.png', {
-		    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
-		*/
 
 		/*L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);*/
 
-		L.tileLayer('http://{s}.tiles.mapbox.com/v3/mtmail.map-16sfyow3/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+		L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png', {
+			attribution:
+					'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors | ' +
+					'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>'
 		}).addTo(map);
 
 		map.on('click', function(e) {
