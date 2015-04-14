@@ -7,11 +7,11 @@ To see the plugin in action, take a look at the [demo](http://geocoder.opencaged
 
 ## Installation
 
-Clone from GitHub: `git@github.com:lokku/leaflet-opencage-search.git`.
+Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-search.git`.
 
 Install with Bower: `$ bower install Leaflet.OpenCage.Search`.
 
-Download a [zip or tarball archive](https://github.com/lokku/leaflet-opencage-search/releases) from GitHub.
+Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-search/releases) from GitHub.
 
 ## Configuration
 
