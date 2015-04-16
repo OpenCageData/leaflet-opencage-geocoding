@@ -4,13 +4,13 @@
   "description": "Leaflet plugin for search and geocoding via the OpenCageData Geocoder API",
   "repository": {
     "type": "git",
-    "url": "git@github.com:lokku/leaflet-opencage-search.git"
+    "url": "git@github.com:opencagedata/leaflet-opencage-search.git"
   },
   "homepage": "http://geocoder.opencagedata.com/code.html",
   "author": {
-    "name": "OpenCage Data (a Lokku brand)",
+    "name": "OpenCage Data",
     "email": "info@opencagedata.com",
-    "url": "http://geocoder.opencagedata.com"
+    "url": "http://www.opencagedata.com"
   },
   "license": "BSD",
   "keywords": [
