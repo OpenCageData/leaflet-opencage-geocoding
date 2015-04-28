@@ -115,7 +115,11 @@
 		},
 
 		markGeocode: function(result) {
-			this._map.fitBounds(result.bounds);
+			if (result.bounds) {
+				this._map.fitBounds(result.bounds);
+			} else {
+				this._map.panTo(result.center);
+			}
 
 			if (this._geocodeMarker) {
 				this._map.removeLayer(this._geocodeMarker);
@@ -274,11 +278,13 @@
 				for (var i=data.results.length - 1; i >= 0; i--) {
 					results[i] = {
 						name: data.results[i].formatted,
-						bounds: L.latLngBounds(
-							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
-							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]),
 						center: L.latLng(data.results[i].geometry.lat, data.results[i].geometry.lng)
 					};
+					if (data.results[i].bounds) {
+						results[i]['bounds'] = L.latLngBounds(
+							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
+							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]);
+					}	
 				}
 				cb.call(context, results);
 			}, this, 'jsonp');
