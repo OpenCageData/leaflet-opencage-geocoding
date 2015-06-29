@@ -1,12 +1,12 @@
 /* 
- * OpenCage Data Search Control v1.0.1 - 2014-09-11
- * Copyright (c) 2014, OpenCage Data (a Lokku brand) 
+ * OpenCage Data Search Control v1.0.3 - 2015-06-29
+ * Copyright (c) 2015, OpenCage Data 
  * info@opencagedata.com 
- * http://geocoder.opencagedata.com 
+ * http://www.opencagedata.com 
  * 
  * Licensed under the BSD license. 
  * Demo: http://geocoder.opencagedata.com/code.html 
- * Source: git@github.com:lokku/leaflet-opencage-search.git 
+ * Source: git@github.com:opencagedata/leaflet-opencage-search.git 
  */
 .leaflet-control-ocd-search {
 	background: white;

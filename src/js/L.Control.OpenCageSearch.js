@@ -281,7 +281,7 @@
 						center: L.latLng(data.results[i].geometry.lat, data.results[i].geometry.lng)
 					};
 					if (data.results[i].bounds) {
-						results[i]['bounds'] = L.latLngBounds(
+						results[i].bounds = L.latLngBounds(
 							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
 							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]);
 					}	

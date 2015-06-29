@@ -1,12 +1,12 @@
 /* 
- * OpenCage Data Search Control v1.0.1 - 2014-09-11
- * Copyright (c) 2014, OpenCage Data (a Lokku brand) 
+ * OpenCage Data Search Control v1.0.3 - 2015-06-29
+ * Copyright (c) 2015, OpenCage Data 
  * info@opencagedata.com 
- * http://geocoder.opencagedata.com 
+ * http://www.opencagedata.com 
  * 
  * Licensed under the BSD license. 
  * Demo: http://geocoder.opencagedata.com/code.html 
- * Source: git@github.com:lokku/leaflet-opencage-search.git 
+ * Source: git@github.com:opencagedata/leaflet-opencage-search.git 
  */
 (function (factory) {
 	// Packaging/modules magic dance
@@ -125,7 +125,11 @@
 		},
 
 		markGeocode: function(result) {
-			this._map.fitBounds(result.bounds);
+			if (result.bounds) {
+				this._map.fitBounds(result.bounds);
+			} else {
+				this._map.panTo(result.center);
+			}
 
 			if (this._geocodeMarker) {
 				this._map.removeLayer(this._geocodeMarker);
@@ -284,11 +288,13 @@
 				for (var i=data.results.length - 1; i >= 0; i--) {
 					results[i] = {
 						name: data.results[i].formatted,
-						bounds: L.latLngBounds(
-							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
-							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]),
 						center: L.latLng(data.results[i].geometry.lat, data.results[i].geometry.lng)
 					};
+					if (data.results[i].bounds) {
+						results[i].bounds = L.latLngBounds(
+							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
+							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]);
+					}	
 				}
 				cb.call(context, results);
 			}, this, 'jsonp');
