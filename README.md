@@ -36,8 +36,8 @@ two image files to a directory relative to the location of the control's CSS fil
 Load the plugin's CSS and JavaScript files:
 
 ```HTML
-<link rel="stylesheet" href="leaflet-opencage-search/dist/css/L.Control.OpenCageSearch.dev.css" />
-<script src="leaflet-opencage-search/dist/js/L.Control.OpenCageSearch.dev.js"></script>
+<link rel="stylesheet" href="http://rawgit.com/opencagedata/leaflet-opencage-search/master/dist/css/L.Control.OpenCageSearch.dev.css" />
+<script src="http://rawgit.com/opencagedata/leaflet-opencage-search/master/dist/js/L.Control.OpenCageSearch.dev.js"></script>
 ```
 
 Add the plugin's control to an `L.Map` instance:
