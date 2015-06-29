@@ -48,3 +48,12 @@ Copied 2 files
 
 Done, without errors.
 ```
+
+## Releasing
+
+1. update version in bower.json
+
+2. git commit, git push
+
+3. git tag <version>, git push --tags
+
