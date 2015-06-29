@@ -1,17 +1,24 @@
 # OpenCage Data Search and Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) search control that uses [OpenCage Data's](http://geocoder.opencagedata.com/)
-geocoder.
+A [Leaflet](http://leafletjs.com/) search control that uses OpenCage Data's [geocoder](http://geocoder.opencagedata.com/).
 
-To see the plugin in action, take a look at the [demo](http://geocoder.opencagedata.com/code/leaflet-demo.html).
+Take a look at the [demo](http://rawgit.com/opencagedata/leaflet-opencage-search/master/demo/index.html).
+
 
 ## Installation
 
-Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-search.git`.
+You have three options
 
-Install with Bower: `$ bower install Leaflet.OpenCage.Search`.
+* Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-search.git`
 
-Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-search/releases) from GitHub.
+or
+
+* Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-search/releases)
+
+or
+
+* Install with Bower: `$ bower install Leaflet.OpenCage.Search`
+
 
 ## Configuration
 
@@ -48,55 +55,14 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 
 ```
 
-## Development and Production Versions
+## Contributing
 
-## Rebuilding from Source
+See `CONTRIBUTING.md` file.
 
-The plugin's build process is managed by [Grunt](http://gruntjs.com/installing-grunt),
-which in turn is built on top of [Node.js](http://nodejs.org/). You'll need to have
-both of these applications installed on your machine to rebuild the plugin from source.
+## Dependencies
 
-Assuming you have both Grunt and Node.js installed, you can install all the build
-dependencies with a single command, from the plugin's root directory:
+Leaflet version 0.7+
 
-```shell
-$ npm install
-```
+## License
 
-This will install all of the plugin's dependencies into the `node_modules` directory
-(and which is also why you'll find this directory in the plugin's `.gitignore` file).
-
-Once you have all the dependencies in place, you can rebuild the plugin from source
-by simply running `grunt`:
-
-```shell
-$ grunt
-Running "clean:dist" (clean) task
-Cleaning dist/css...OK
-Cleaning dist/images...OK
-Cleaning dist/js...OK
-
-Running "jshint:files" (jshint) task
->> 1 file lint free.
-
-Running "concat:dist" (concat) task
-File dist/js/L.Control.OpenCageSearch.dev.js created.
-File dist/css/L.Control.OpenCageSearch.dev.css created.
-
-Running "uglify:dist" (uglify) task
-File dist/js/L.Control.OpenCageSearch.min.js created: 8.38 kB → 6.09 kB
-
-Running "cssmin:minify" (cssmin) task
-File dist/css/L.Control.OpenCageData.Search.min.css created: 2.86 kB → 2.5 kB
-
-Running "copy:images" (copy) task
-Copied 2 files
-
-Done, without errors.
-```
-
-## Credits
-
-This plugin was based on and inspired by [Per Liedman's](https://github.com/perliedman) [Leaflet Control Geocoder](https://github.com/perliedman/leaflet-control-geocoder).
-Thanks, credits and kudos go to Per for making a well structured plugin and for
-making it available under an Open Source license.
+See `LICENSE` file.

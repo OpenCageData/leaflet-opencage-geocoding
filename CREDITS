@@ -1,0 +1,10 @@
+CREDITS
+==============================================================================
+
+This plugin was based on and inspired by Per Liedman's Leaflet Control Geocoder
+https://github.com/perliedman/leaflet-control-geocoder.
+
+Thanks, credits and kudos go to Per for making a well structured plugin and for
+making it available under an Open Source license.
+
+Gary Gale (http://www.garygale.com/) extended it to use the OpenCage Geocoder.
