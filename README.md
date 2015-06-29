@@ -1,8 +1,8 @@
-# OpenCage Data Search and Geocoding Control for Leaflet
+# OpenCage Data Geocoding Control for Leaflet
 
 A [Leaflet](http://leafletjs.com/) search control that uses OpenCage Data's [geocoder](http://geocoder.opencagedata.com/).
 
-Take a look at the [demo](http://rawgit.com/opencagedata/leaflet-opencage-search/master/demo/index.html).
+Check out a demo page in `/demo`. Or take a look at the live [demo](http://opencagedata.github.io/leaflet-opencage-search/).
 
 
 ## Installation
