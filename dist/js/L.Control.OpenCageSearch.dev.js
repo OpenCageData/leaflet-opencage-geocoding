@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.0.3 - 2015-06-29
+ * OpenCage Data Search Control v1.0.3 - 2015-08-22
  * Copyright (c) 2015, OpenCage Data 
  * info@opencagedata.com 
  * http://www.opencagedata.com 
@@ -63,6 +63,7 @@
 			this._container = container;
 			input = this._input = L.DomUtil.create('input');
 			input.type = 'text';
+			input.placeholder = this.options.placeholder;
 
 			L.DomEvent.addListener(input, 'keydown', this._keydown, this);
 
