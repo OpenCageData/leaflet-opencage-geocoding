@@ -55,6 +55,32 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
 
 ```
 
+## Customizing
+
+By default, when a geocoding result is found, the control will center the map on it and place a marker
+at its location. This can be customized by overwriting the control's markGeocode function, to perform
+any action desired.
+
+For example:
+
+```javascript
+var control = L.Control.openCageSearch(options).addTo(map);
+
+control.markGeocode = function(result) {
+    var bbox = result.bbox;
+    L.polygon([
+         bbox.getSouthEast(),
+         bbox.getNorthEast(),
+         bbox.getNorthWest(),
+         bbox.getSouthWest()
+    ]).addTo(map);
+};
+```
+
+This will add a polygon representing the result's boundingbox when a result is selected.
+
+
+
 ## Contributing
 
 See `CONTRIBUTING.md` file.
