@@ -51,7 +51,7 @@ Done, without errors.
 
 ## Releasing
 
-1. update version in bower.json
+1. update version in `bower.json` and `package.json`
 
 2. git commit, git push
 

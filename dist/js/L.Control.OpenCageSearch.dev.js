@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.0.3 - 2015-08-22
+ * OpenCage Data Search Control v1.1.2 - 2015-08-31
  * Copyright (c) 2015, OpenCage Data 
  * info@opencagedata.com 
  * http://www.opencagedata.com 
@@ -83,7 +83,7 @@
 				if (this.options.expand === 'click') {
 					L.DomEvent.addListener(icon, 'click', function(e) {
 						// TODO: touch
-						if (e.button === 0 && e.detail === 1) {
+						if (e.button === 0 && e.detail !== 2) {
 							this._toggle();
 						}
 					}, this);
