@@ -26,7 +26,7 @@ The control uses two image files that it expects to find in a directory with
 a path relative to the control's CSS files as `../images`. If you've installed
 the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Search/dist/images/`. If you've
 cloned the control's GitHub repository or downloaded and unpacked an archive
-from GitHub, you'll find these in 'dist/images'.
+from GitHub, you'll find these in `dist/images`.
 
 Whichever installation method you've chosen, you'll need to move a copy of these
 two image files to a directory relative to the location of the control's CSS files.
@@ -45,12 +45,12 @@ Add the plugin's control to an `L.Map` instance:
 ```javascript
 var map = L.map('map').setView([51.52255, -0.10249], 13);
 var options = {
-	key: 'your-api-key-here',
-	limit: 10
+    key: 'your-api-key-here',
+    limit: 10
 };
 var control = L.Control.openCageSearch(options).addTo(map);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-	attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 ```
@@ -80,6 +80,26 @@ control.markGeocode = function(result) {
 This will add a polygon representing the result's boundingbox when a result is selected.
 
 
+## Options
+
+You can overwrite the following options, for example to translate.
+
+
+```javascript
+var options = {
+    key: '', // your OpenCage API key
+    limit: 5 // number of results to be displayed
+    position: 'topright',
+    placeholder: 'Search...', // the text in the empty search box
+    errorMessage: 'Nothing found.',
+    showResultIcons: false,
+    collapsed: true,
+    expand: 'click',
+};    
+
+var control = L.Control.openCageSearch(options).addTo(map);
+
+```
 
 ## Contributing
 
