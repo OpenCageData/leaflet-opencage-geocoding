@@ -2,7 +2,7 @@
 
 A [Leaflet](http://leafletjs.com/) search control that uses OpenCage Data's [geocoder](http://geocoder.opencagedata.com/).
 
-Check out a demo page in `/demo`. Or take a look at the live [demo](http://opencagedata.github.io/leaflet-opencage-search/).
+Check out a demo page in `/demo`. Or take a look at the live [demo](https://geocoder.opencagedata.com/tutorials/geocode-in-leaflet).
 
 
 ## Installation
