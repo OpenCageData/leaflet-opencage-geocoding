@@ -6,11 +6,11 @@
     "type": "git",
     "url": "git@github.com:opencagedata/leaflet-opencage-search.git"
   },
-  "homepage": "http://geocoder.opencagedata.com/code.html",
+  "homepage": "https://geocoder.opencagedata.com",
   "author": {
     "name": "OpenCage Data",
     "email": "info@opencagedata.com",
-    "url": "http://www.opencagedata.com"
+    "url": "https://opencagedata.com"
   },
   "license": "BSD",
   "keywords": [
