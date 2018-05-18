@@ -1,11 +1,11 @@
 /* 
- * OpenCage Data Search Control v1.1.2 - 2015-08-31
- * Copyright (c) 2015, OpenCage Data 
+ * OpenCage Data Search Control v1.1.3 - 2018-05-18
+ * Copyright (c) 2018, OpenCage Data 
  * info@opencagedata.com 
- * http://www.opencagedata.com 
+ * https://opencagedata.com 
  * 
  * Licensed under the BSD license. 
- * Demo: http://geocoder.opencagedata.com/code.html 
+ * Demo: https://geocoder.opencagedata.com 
  * Source: git@github.com:opencagedata/leaflet-opencage-search.git 
  */
 (function (factory) {
