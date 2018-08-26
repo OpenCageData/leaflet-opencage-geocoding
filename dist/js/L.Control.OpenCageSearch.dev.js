@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.1.3 - 2018-05-18
+ * OpenCage Data Search Control v1.1.3 - 2018-08-26
  * Copyright (c) 2018, OpenCage Data 
  * info@opencagedata.com 
  * https://opencagedata.com 
@@ -262,6 +262,8 @@
 		script.type = 'text/javascript';
 		script.src = url + L.Util.getParamString(params);
 		script.id = callbackId;
+		script.addEventListener('error', function() { callback({results: []}); });
+		script.addEventListener('abort', function() { callback({results: []}); });
 		document.getElementsByTagName('head')[0].appendChild(script);
 	};
 
