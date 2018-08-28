@@ -32,7 +32,10 @@ module.exports = function(grunt) {
 				globals: {
 					console: true,
 					module: true
-				}
+				},
+				'-W069': false,
+	            'reporterOutput': "",
+	            'esnext': true
 			},
 			files: ['src/**/*.js']
 		},
