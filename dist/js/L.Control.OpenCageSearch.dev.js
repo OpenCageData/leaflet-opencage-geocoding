@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.1.4 - 2018-08-28
+ * OpenCage Data Search Control v1.1.5 - 2018-09-30
  * Copyright (c) 2018, OpenCage Data 
  * info@opencagedata.com 
  * https://opencagedata.com 
@@ -281,11 +281,16 @@
 		},
 
 		geocode: function(query, cb, context) {
+      var proximity = {};
+      if (context && context._map && context._map.getCenter()) {
+        var center = context._map.getCenter();
+        proximity.proximity = center.lat + "," + center.lng;
+      }
 			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
 				limit: this.options.limit,
 				key: this.options.key
-			}, this.options.geocodingQueryParams),
+			}, proximity, this.options.geocodingQueryParams),
 			function(data) {
 				var results = [];
 				for (var i=data.results.length - 1; i >= 0; i--) {
