@@ -25,7 +25,7 @@ Once you have all the dependencies in place, you can rebuild the plugin from sou
 by simply running `grunt`:
 
 ```shell
-$ grunt
+$ ./node_modules/.bin/grunt
 Running "clean:dist" (clean) task
 Cleaning dist/css...OK
 Cleaning dist/images...OK

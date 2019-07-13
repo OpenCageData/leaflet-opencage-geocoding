@@ -1,6 +1,6 @@
 /* 
- * OpenCage Data Search Control v1.2.0 - 2018-09-30
- * Copyright (c) 2018, OpenCage Data 
+ * OpenCage Data Search Control v1.2.1 - 2019-07-14
+ * Copyright (c) 2019, OpenCage Data 
  * info@opencagedata.com 
  * https://opencagedata.com 
  * 
