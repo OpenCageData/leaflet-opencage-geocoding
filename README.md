@@ -95,6 +95,8 @@ var options = {
     showResultIcons: false,
     collapsed: true,
     expand: 'click',
+    addResultToMap: true, // if a map marker should be added after the user clicks a result
+    onResultClick: undefined // callback with result as first parameter
 };    
 
 var control = L.Control.openCageSearch(options).addTo(map);

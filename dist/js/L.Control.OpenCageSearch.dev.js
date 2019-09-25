@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.2.1 - 2019-07-14
+ * OpenCage Data Search Control v1.3.0 - 2019-09-25
  * Copyright (c) 2019, OpenCage Data 
  * info@opencagedata.com 
  * https://opencagedata.com 
@@ -40,6 +40,8 @@
 			placeholder: 'Search...',
 			errorMessage: 'Nothing found.',
 			key: '',
+			onResultClick: undefined,
+			addResultToMap: true,
 			limit: 5
 		},
 
@@ -163,7 +165,13 @@
 				this._clearResults();
 			}
 
-			this.markGeocode(result);
+			if (this.options.onResultClick && typeof(this.options.onResultClick) === 'function'){
+				this.options.onResultClick(result);
+			}
+
+			if (this.options.addResultToMap){
+				this.markGeocode(result);
+			}
 		},
 
 		_toggle: function() {
@@ -281,11 +289,12 @@
 		},
 
 		geocode: function(query, cb, context) {
-      var proximity = {};
-      if (context && context._map && context._map.getCenter()) {
-        var center = context._map.getCenter();
-        proximity.proximity = center.lat + "," + center.lng;
-      }
+			var proximity = {};
+			if (context && context._map && context._map.getCenter()) {
+				var center = context._map.getCenter();
+				proximity.proximity = center.lat + "," + center.lng;
+			}
+
 			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
 				limit: this.options.limit,
