@@ -1,9 +1,9 @@
 {
   "name": "Leaflet.OpenCage.Search",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "homepage": "https://opencagedata.com",
   "authors": [
-    "info@opencagedata.com"
+    "support@opencagedata.com"
   ],
   "description": "A Leaflet search control that uses OpenCage Data's geocoder",
   "main": "dist/js/L.Control.OpenCageSearch.min.js",
@@ -17,7 +17,7 @@
     "opencage",
     "opencagedata"
   ],
-  "license": "MIT",
+  "license": "BSD",
   "ignore": [
     "**/.*",
     "node_modules",
