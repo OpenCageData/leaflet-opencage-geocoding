@@ -1,7 +1,7 @@
 /* 
- * OpenCage Data Search Control v1.3.0 - 2019-09-25
- * Copyright (c) 2019, OpenCage Data 
- * info@opencagedata.com 
+ * OpenCage Data Search Control v1.3.1 - 2020-03-17
+ * Copyright (c) 2020, OpenCage GmbH 
+ * support@opencagedata.com 
  * https://opencagedata.com 
  * 
  * Licensed under the BSD license. 
