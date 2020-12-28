@@ -96,7 +96,12 @@ var options = {
     collapsed: true,
     expand: 'click',
     addResultToMap: true, // if a map marker should be added after the user clicks a result
-    onResultClick: undefined // callback with result as first parameter
+    onResultClick: undefined, // callback with result as first parameter
+    resultExtension: {
+        geohash: "annotations.geohash",
+        what3words: "annotations.what3words",
+        addressComponents: "components"
+    } //if additional attributes from OpenCage search API should be added to the result
 };    
 
 var control = L.Control.openCageSearch(options).addTo(map);
