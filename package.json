@@ -1,7 +1,7 @@
 {
   "name": "leaflet-opencage-search",
   "version": "1.3.2",
-  "description": "Leaflet plugin for search and geocoding via the OpenCageData Geocoder API",
+  "description": "Leaflet plugin for search and geocoding via the OpenCage Geocoder API",
   "repository": {
     "type": "git",
     "url": "git@github.com:opencagedata/leaflet-opencage-search.git"
@@ -31,8 +31,8 @@
     "grunt-contrib-concat": "^1.0",
     "grunt-contrib-copy": "^1.0",
     "grunt-contrib-cssmin": "^3.0",
-    "grunt-contrib-jshint": "^2.1",
-    "grunt-contrib-uglify": "^4.0",
+    "grunt-contrib-jshint": "^3.0",
+    "grunt-contrib-uglify": "^5.0",
     "grunt-contrib-watch": "^1.1",
     "minimist": "^1.2.2"
   }

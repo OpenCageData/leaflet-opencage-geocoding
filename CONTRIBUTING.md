@@ -10,7 +10,7 @@ The plugin's build process is managed by [Grunt](http://gruntjs.com/installing-g
 which in turn is built on top of [Node.js](http://nodejs.org/). You'll need to have
 both of these applications installed on your machine to rebuild the plugin from source.
 
-Assuming you have both Grunt and Node.js (version 8 or higher) installed, you can
+Assuming you have both Grunt and Node.js (version 10 or higher) installed, you can
 install all the build dependencies with a single command, from the plugin's root
 directory:
 
