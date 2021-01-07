@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.3.2 - 2021-01-07
+ * OpenCage Data Search Control v1.4.0 - 2021-01-07
  * Copyright (c) 2021, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
