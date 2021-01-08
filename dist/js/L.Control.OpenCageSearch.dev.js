@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.4.0 - 2021-01-07
+ * OpenCage Data Search Control v1.4.0 - 2021-01-08
  * Copyright (c) 2021, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -302,7 +302,6 @@
 			}, proximity, this.options.geocodingQueryParams),
 			function(data) {
 				var results = [];
-				var resultExtObj = this.options.resultExtension;
 
 				for (var i=data.results.length - 1; i >= 0; i--) {
 					results[i] = {
@@ -314,27 +313,30 @@
 							[data.results[i].bounds.southwest.lat, data.results[i].bounds.southwest.lng],
 							[data.results[i].bounds.northeast.lat, data.results[i].bounds.northeast.lng]);
 					}
-					// additional result fields as provided in options.resultExtension
-					// resultExtension: {
-					// 	geohash: "annotations.geohash",
-					// 	what3words: "annotations.what3words",
-					// 	addressComponents: "components"
-					// }
-					var resultExtKeys = Object.keys(resultExtObj);
-					for(var j=resultExtKeys.length - 1; j>=0; j--) {
-						var key = resultExtKeys[j];
-						var resultAttr = data.results[i];
+					if(this.options.resultExtension) {
+						// additional result fields as provided in options.resultExtension
+						// resultExtension: {
+						// 	geohash: "annotations.geohash",
+						// 	what3words: "annotations.what3words",
+						// 	addressComponents: "components"
+						// }
+						var resultExtObj = this.options.resultExtension;
+						var resultExtKeys = Object.keys(resultExtObj);
+						for(var j=resultExtKeys.length - 1; j>=0; j--) {
+							var key = resultExtKeys[j];
+							var resultAttr = data.results[i];
 
-						var attrPathKeys = resultExtObj[key].split(".");
-						for(var k=0; k<attrPathKeys.length; k++) {
-							var keypath = attrPathKeys[k];
-							if (resultAttr[keypath]) {
-								resultAttr =  resultAttr[keypath];
-							} else {
-								resultAttr = undefined;
+							var attrPathKeys = resultExtObj[key].split(".");
+							for(var k=0; k<attrPathKeys.length; k++) {
+								var keypath = attrPathKeys[k];
+								if (resultAttr[keypath]) {
+									resultAttr =  resultAttr[keypath];
+								} else {
+									resultAttr = undefined;
+								}
 							}
+							results[i][key] = resultAttr;
 						}
-						results[i][key] = resultAttr;
 					}
 				}
 				cb.call(context, results);
