@@ -70,6 +70,7 @@
 			container.appendChild(this._alts);
 
 			L.DomEvent.addListener(form, 'submit', this._geocode, this);
+			L.DomEvent.addListener(icon, 'click', this._geocode, this);
 
 			if (this.options.collapsed) {
 				if (this.options.expand === 'click') {
