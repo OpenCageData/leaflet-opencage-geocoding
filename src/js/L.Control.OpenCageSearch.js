@@ -111,6 +111,10 @@
 				for (var i = 0; i < results.length; i++) {
 					this._alts.appendChild(this._createAlt(results[i], i));
 				}
+				if(this.options.position == 'topleft' || this.options.position == 'topright'){
+				}else if(this.options.position == 'bottomleft' || this.options.position == 'bottomright'){
+					this._container.insertBefore(this._alts, this._container.firstElementChild)
+				}
 			}
 
 			else {
