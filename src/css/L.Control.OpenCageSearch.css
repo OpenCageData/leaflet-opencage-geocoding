@@ -128,3 +128,15 @@ ul.leaflet-control-ocd-search-alternatives {
 .leaflet-control-ocd-search-selected {
 	background-color: #ddd;
 }
+
+.leaflet-control-ocd-search-clear-result{
+	font-weight:bolder; 
+	font-size:19px;
+	color:red;
+	cursor:pointer;
+	padding:5px;
+	padding-right:0;
+}
+.leaflet-control-ocd-search-clear-result.hide{
+	display:none;
+}

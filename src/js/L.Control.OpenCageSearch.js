@@ -47,6 +47,7 @@
 		onAdd: function (map) {
 			var className = 'leaflet-control-ocd-search';
 			var container = L.DomUtil.create('div', className);
+			var clearResultInput = this._clearResultInput = L.DomUtil.create('span', 'leaflet-control-ocd-search-clear-result hide', container);
 			var icon = L.DomUtil.create('div', 'leaflet-control-ocd-search-icon', container);
 			var form = this._form = L.DomUtil.create('form', className + '-form', container);
 			var input;
@@ -58,6 +59,11 @@
 			input.placeholder = this.options.placeholder;
 
 			L.DomEvent.addListener(input, 'keydown', this._keydown, this);
+
+			clearResultInput.innerHTML = 'X';
+			clearResultInput.href = '#';
+
+			L.DomEvent.addListener(clearResultInput, 'click', this._clearResults, this);
 
 			this._errorElement = document.createElement('div');
 			this._errorElement.className = className + '-form-no-error';
@@ -105,6 +111,8 @@
 			}
 
 			else if (results.length > 0) {
+				L.DomUtil.removeClass(this._clearResultInput, 'hide');
+
 				this._alts.innerHTML = '';
 				this._results = results;
 				L.DomUtil.removeClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
@@ -194,6 +202,7 @@
 			L.DomUtil.addClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
 			this._selection = null;
 			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-ocd-search-error');
+			L.DomUtil.addClass(this._clearResultInput, 'hide');
 		},
 
 		_createAlt: function(result, index) {

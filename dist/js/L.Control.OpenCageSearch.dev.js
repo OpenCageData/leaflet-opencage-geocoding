@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.4.1 - 2021-01-09
+ * OpenCage Data Search Control v1.4.1 - 2021-04-27
  * Copyright (c) 2021, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -57,6 +57,7 @@
 		onAdd: function (map) {
 			var className = 'leaflet-control-ocd-search';
 			var container = L.DomUtil.create('div', className);
+			var clearResultInput = this._clearResultInput = L.DomUtil.create('span', 'leaflet-control-ocd-search-clear-result hide', container);
 			var icon = L.DomUtil.create('div', 'leaflet-control-ocd-search-icon', container);
 			var form = this._form = L.DomUtil.create('form', className + '-form', container);
 			var input;
@@ -69,6 +70,11 @@
 
 			L.DomEvent.addListener(input, 'keydown', this._keydown, this);
 
+			clearResultInput.innerHTML = 'X';
+			clearResultInput.href = '#';
+
+			L.DomEvent.addListener(clearResultInput, 'click', this._clearResults, this);
+
 			this._errorElement = document.createElement('div');
 			this._errorElement.className = className + '-form-no-error';
 			this._errorElement.innerHTML = this.options.errorMessage;
@@ -80,6 +86,7 @@
 			container.appendChild(this._alts);
 
 			L.DomEvent.addListener(form, 'submit', this._geocode, this);
+			L.DomEvent.addListener(icon, 'click', this._geocode, this);
 
 			if (this.options.collapsed) {
 				if (this.options.expand === 'click') {
@@ -114,11 +121,17 @@
 			}
 
 			else if (results.length > 0) {
+				L.DomUtil.removeClass(this._clearResultInput, 'hide');
+
 				this._alts.innerHTML = '';
 				this._results = results;
 				L.DomUtil.removeClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
 				for (var i = 0; i < results.length; i++) {
 					this._alts.appendChild(this._createAlt(results[i], i));
+				}
+				if(this.options.position == 'topleft' || this.options.position == 'topright'){
+				}else if(this.options.position == 'bottomleft' || this.options.position == 'bottomright'){
+					this._container.insertBefore(this._alts, this._container.firstElementChild)
 				}
 			}
 
@@ -199,6 +212,7 @@
 			L.DomUtil.addClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
 			this._selection = null;
 			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-ocd-search-error');
+			L.DomUtil.addClass(this._clearResultInput, 'hide');
 		},
 
 		_createAlt: function(result, index) {

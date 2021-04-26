@@ -1,5 +1,5 @@
 /* 
- * OpenCage Data Search Control v1.4.1 - 2021-01-09
+ * OpenCage Data Search Control v1.4.1 - 2021-04-27
  * Copyright (c) 2021, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -137,4 +137,16 @@ ul.leaflet-control-ocd-search-alternatives {
 .leaflet-control-ocd-search-alternatives a:hover,
 .leaflet-control-ocd-search-selected {
 	background-color: #ddd;
+}
+
+.leaflet-control-ocd-search-clear-result{
+	font-weight:bolder; 
+	font-size:19px;
+	color:red;
+	cursor:pointer;
+	padding:5px;
+	padding-right:0;
+}
+.leaflet-control-ocd-search-clear-result.hide{
+	display:none;
 }
