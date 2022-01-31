@@ -1,12 +1,12 @@
 /* 
- * OpenCage Data Search Control v1.4.2 - 2022-01-31
+ * OpenCage Data Geocoding Control v1.4.2 - 2022-01-31
  * Copyright (c) 2022, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
  * 
  * Licensed under the BSD license. 
  * Demo: https://opencagedata.com 
- * Source: git@github.com:opencagedata/leaflet-opencage-search.git 
+ * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
  */
 (function (factory) {
 	// Packaging/modules magic dance

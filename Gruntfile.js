@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		meta: {
 			banner: '/* \n' +
-				' * OpenCage Data Search Control v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+				' * OpenCage Data Geocoding Control v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
 				' * Copyright (c) <%= grunt.template.today("yyyy") %>, <%= pkg.author.name %> \n' +
 				' * <%= pkg.author.email %> \n' +
 				' * <%= pkg.author.url %> \n' +
@@ -45,8 +45,8 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'dist/js/L.Control.OpenCageSearch.dev.js': ['src/js/L.Control.OpenCageSearch.js'],
-					'dist/css/L.Control.OpenCageSearch.dev.css': ['src/css/L.Control.OpenCageSearch.css']
+					'dist/js/L.Control.OpenCageGeocoding.dev.js': ['src/js/L.Control.OpenCageSearch.js'],
+					'dist/css/L.Control.OpenCageGeocoding.dev.css': ['src/css/L.Control.OpenCageSearch.css']
 				}
 			}
 		},
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'dist/js/L.Control.OpenCageSearch.min.js': ['dist/js/L.Control.OpenCageSearch.dev.js']
+					'dist/js/L.Control.OpenCageGeocoding.min.js': ['dist/js/L.Control.OpenCageGeocoding.dev.js']
 				}
 
 			}
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: 'dist/css',
 				files: {
-					'dist/css/L.Control.OpenCageData.Search.min.css': ['dist/css/L.Control.OpenCageSearch.dev.css']
+					'dist/css/L.Control.OpenCageGeocoding.min.css': ['dist/css/L.Control.OpenCageGeocoding.dev.css']
 				}
 			}
 		},

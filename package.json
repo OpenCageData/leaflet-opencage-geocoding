@@ -1,10 +1,10 @@
 {
-  "name": "leaflet-opencage-search",
+  "name": "@opencage/leaflet-opencage-geocoding",
   "version": "1.4.2",
-  "description": "Leaflet plugin for search and geocoding via the OpenCage Geocoder API",
+  "description": "Leaflet plugin for geocoding via the OpenCage Geocoder API",
   "repository": {
     "type": "git",
-    "url": "git@github.com:opencagedata/leaflet-opencage-search.git"
+    "url": "git@github.com:opencagedata/leaflet-opencage-geocoding.git"
   },
   "homepage": "https://opencagedata.com",
   "author": {
@@ -21,6 +21,10 @@
     "map",
     "opencagedata"
   ],
+  "scripts": {
+    "build": "grunt",
+    "clean": "grunt clean"
+  },
   "dependencies": {
     "leaflet": "*"
   },
