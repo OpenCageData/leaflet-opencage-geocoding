@@ -45,8 +45,8 @@ module.exports = function(grunt) {
 			},
 			dist: {
 				files: {
-					'dist/js/L.Control.OpenCageGeocoding.dev.js': ['src/js/L.Control.OpenCageSearch.js'],
-					'dist/css/L.Control.OpenCageGeocoding.dev.css': ['src/css/L.Control.OpenCageSearch.css']
+					'dist/js/L.Control.OpenCageGeocoding.dev.js': ['src/js/L.Control.OpenCageGeocoding.js'],
+					'dist/css/L.Control.OpenCageGeocoding.dev.css': ['src/css/L.Control.OpenCageGeocoding.css']
 				}
 			}
 		},
