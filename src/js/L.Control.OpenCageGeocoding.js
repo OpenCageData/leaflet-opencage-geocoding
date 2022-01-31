@@ -21,7 +21,7 @@
 	}
 }(function (L) {
 	'use strict';
-	L.Control.OpenCageSearch = L.Control.extend({
+	L.Control.OpenCageGeocoding = L.Control.extend({
 		options: {
 			showResultIcons: false,
 			collapsed: true,
@@ -40,7 +40,7 @@
 		initialize: function (options) {
 			L.Util.setOptions(this, options);
 			if (!this.options.geocoder) {
-				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder(this.options);
+				this.options.geocoder = new L.Control.OpenCageGeocoding.Geocoder(this.options);
 			}
 		},
 
@@ -246,13 +246,13 @@
 		}
 	});
 
-	L.Control.openCageSearch = function(id, options) {
-		return new L.Control.OpenCageSearch(id, options);
+	L.Control.openCageGeocoding = function(id, options) {
+		return new L.Control.OpenCageGeocoding(id, options);
 	};
 
-	L.Control.OpenCageSearch.callbackId = 0;
-	L.Control.OpenCageSearch.jsonp = function(url, params, callback, context, jsonpParam) {
-		var callbackId = '_ocd_geocoder_' + (L.Control.OpenCageSearch.callbackId++);
+	L.Control.OpenCageGeocoding.callbackId = 0;
+	L.Control.OpenCageGeocoding.jsonp = function(url, params, callback, context, jsonpParam) {
+		var callbackId = '_ocd_geocoder_' + (L.Control.OpenCageGeocoding.callbackId++);
 
 		params[jsonpParam || 'callback'] = callbackId;
 		window[callbackId] = L.Util.bind(callback, context);
@@ -265,7 +265,7 @@
 		document.getElementsByTagName('head')[0].appendChild(script);
 	};
 
-	L.Control.OpenCageSearch.Geocoder = L.Class.extend({
+	L.Control.OpenCageGeocoding.Geocoder = L.Class.extend({
 		options: {
 			serviceUrl: 'https://api.opencagedata.com/geocode/v1/',
 			geocodingQueryParams: {},
@@ -285,7 +285,7 @@
 				proximity.proximity = center.lat + "," + center.lng;
 			}
 
-			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
+			L.Control.OpenCageGeocoding.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
 				limit: this.options.limit,
 				key: this.options.key
@@ -338,9 +338,9 @@
 		}
 	});
 
-	L.Control.OpenCageSearch.geocoder = function(options) {
-		return new L.Control.OpenCageSearch.Geocoder(options);
+	L.Control.OpenCageGeocoding.geocoder = function(options) {
+		return new L.Control.OpenCageGeocoding.Geocoder(options);
 	};
 
-	return L.Control.OpenCageSearch;
+	return L.Control.OpenCageGeocoding;
 }));
