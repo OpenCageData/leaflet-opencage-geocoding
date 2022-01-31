@@ -1,6 +1,6 @@
 {
   "name": "leaflet-opencage-search",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Leaflet plugin for search and geocoding via the OpenCage Geocoder API",
   "repository": {
     "type": "git",

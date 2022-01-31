@@ -1,6 +1,6 @@
 /* 
- * OpenCage Data Search Control v1.4.1 - 2021-01-09
- * Copyright (c) 2021, OpenCage GmbH 
+ * OpenCage Data Search Control v1.4.2 - 2022-01-31
+ * Copyright (c) 2022, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
  * 
