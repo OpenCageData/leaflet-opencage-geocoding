@@ -16,13 +16,13 @@ or
 
 or
 
-- Install with Bower: `$ bower install Leaflet.OpenCage.Search`
+- Install with Bower: `$ bower install Leaflet.OpenCage.Geocoding`
 
 ## Configuration
 
 The control uses two image files that it expects to find in a directory with
 a path relative to the control's CSS files as `../images`. If you've installed
-the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Search/dist/images/`. If you've
+the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Geocoding/dist/images/`. If you've
 cloned the control's GitHub repository or downloaded and unpacked an archive
 from GitHub, you'll find these in `dist/images`.
 
