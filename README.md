@@ -12,11 +12,11 @@ You have three options
 
 or
 
-- Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/releases)
+- Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
 
 or
 
-- Install with Bower: `$ bower install Leaflet.OpenCage.Geocoding`
+- Install (using the old plugin's name) with Bower : `$ bower install Leaflet.OpenCage.Search`
 
 ## Configuration
 
@@ -34,8 +34,8 @@ two image files to a directory relative to the location of the control's CSS fil
 Load the plugin's CSS and JavaScript files:
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@2.0.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@2.0.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
 Add the plugin's control to an `L.Map` instance:
