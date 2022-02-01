@@ -1,3 +1,13 @@
+/* 
+ * OpenCage Data Geocoding Control v1.4.2 - 2022-01-31
+ * Copyright (c) 2022, OpenCage GmbH 
+ * support@opencagedata.com 
+ * https://opencagedata.com 
+ * 
+ * Licensed under the BSD license. 
+ * Demo: https://opencagedata.com 
+ * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
+ */
 (function (factory) {
 	// Packaging/modules magic dance
 	var L;
@@ -21,7 +31,7 @@
 	}
 }(function (L) {
 	'use strict';
-	L.Control.OpenCageSearch = L.Control.extend({
+	L.Control.OpenCageGeocoding = L.Control.extend({
 		options: {
 			showResultIcons: false,
 			collapsed: true,
@@ -40,14 +50,14 @@
 		initialize: function (options) {
 			L.Util.setOptions(this, options);
 			if (!this.options.geocoder) {
-				this.options.geocoder = new L.Control.OpenCageSearch.Geocoder(this.options);
+				this.options.geocoder = new L.Control.OpenCageGeocoding.Geocoder(this.options);
 			}
 		},
 
 		onAdd: function (map) {
-			var className = 'leaflet-control-ocd-search';
+			var className = 'leaflet-control-opencage-geocoding';
 			var container = L.DomUtil.create('div', className);
-			var icon = L.DomUtil.create('div', 'leaflet-control-ocd-search-icon', container);
+			var icon = L.DomUtil.create('div', 'leaflet-control-opencage-geocoding-icon', container);
 			var form = this._form = L.DomUtil.create('form', className + '-form', container);
 			var input;
 
@@ -63,7 +73,7 @@
 			this._errorElement.className = className + '-form-no-error';
 			this._errorElement.innerHTML = this.options.errorMessage;
 
-			this._alts = L.DomUtil.create('ul', className + '-alternatives leaflet-control-ocd-search-alternatives-minimized');
+			this._alts = L.DomUtil.create('ul', className + '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized');
 
 			form.appendChild(input);
 			form.appendChild(this._errorElement);
@@ -98,7 +108,7 @@
 		},
 
 		_geocodeResult: function (results) {
-			L.DomUtil.removeClass(this._container, 'leaflet-control-ocd-search-spinner');
+			L.DomUtil.removeClass(this._container, 'leaflet-control-opencage-geocoding-spinner');
 			if (results.length === 1) {
 				this._geocodeResultSelected(results[0]);
 			}
@@ -106,14 +116,14 @@
 			else if (results.length > 0) {
 				this._alts.innerHTML = '';
 				this._results = results;
-				L.DomUtil.removeClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
+				L.DomUtil.removeClass(this._alts, 'leaflet-control-opencage-geocoding-alternatives-minimized');
 				for (var i = 0; i < results.length; i++) {
 					this._alts.appendChild(this._createAlt(results[i], i));
 				}
 			}
 
 			else {
-				L.DomUtil.addClass(this._errorElement, 'leaflet-control-ocd-search-error');
+				L.DomUtil.addClass(this._errorElement, 'leaflet-control-opencage-geocoding-error');
 			}
 		},
 
@@ -139,7 +149,7 @@
 		_geocode: function(event) {
 			L.DomEvent.preventDefault(event);
 
-			L.DomUtil.addClass(this._container, 'leaflet-control-ocd-search-spinner');
+			L.DomUtil.addClass(this._container, 'leaflet-control-opencage-geocoding-spinner');
 			this._clearResults();
 			this.options.geocoder.geocode(this._input.value, this._geocodeResult, this);
 
@@ -165,7 +175,7 @@
 		},
 
 		_toggle: function() {
-			if (this._container.className.indexOf('leaflet-control-ocd-search-expanded') >= 0) {
+			if (this._container.className.indexOf('leaflet-control-opencage-geocoding-expanded') >= 0) {
 				this._collapse();
 			}
 
@@ -175,20 +185,20 @@
 		},
 
 		_expand: function () {
-			L.DomUtil.addClass(this._container, 'leaflet-control-ocd-search-expanded');
+			L.DomUtil.addClass(this._container, 'leaflet-control-opencage-geocoding-expanded');
 			this._input.select();
 		},
 
 		_collapse: function () {
-			this._container.className = this._container.className.replace(' leaflet-control-ocd-search-expanded', '');
-			L.DomUtil.addClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
-			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-ocd-search-error');
+			this._container.className = this._container.className.replace(' leaflet-control-opencage-geocoding-expanded', '');
+			L.DomUtil.addClass(this._alts, 'leaflet-control-opencage-geocoding-alternatives-minimized');
+			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-opencage-geocoding-error');
 		},
 
 		_clearResults: function () {
-			L.DomUtil.addClass(this._alts, 'leaflet-control-ocd-search-alternatives-minimized');
+			L.DomUtil.addClass(this._alts, 'leaflet-control-opencage-geocoding-alternatives-minimized');
 			this._selection = null;
-			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-ocd-search-error');
+			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-opencage-geocoding-error');
 		},
 
 		_createAlt: function(result, index) {
@@ -209,7 +219,7 @@
 			var _this = this,
 				select = function select(dir) {
 					if (_this._selection) {
-						L.DomUtil.removeClass(_this._selection.firstChild, 'leaflet-control-ocd-search-selected');
+						L.DomUtil.removeClass(_this._selection.firstChild, 'leaflet-control-opencage-geocoding-selected');
 						_this._selection = _this._selection[dir > 0 ? 'nextSibling' : 'previousSibling'];
 					}
 
@@ -218,7 +228,7 @@
 					}
 
 					if (_this._selection) {
-						L.DomUtil.addClass(_this._selection.firstChild, 'leaflet-control-ocd-search-selected');
+						L.DomUtil.addClass(_this._selection.firstChild, 'leaflet-control-opencage-geocoding-selected');
 					}
 				};
 
@@ -246,13 +256,13 @@
 		}
 	});
 
-	L.Control.openCageSearch = function(id, options) {
-		return new L.Control.OpenCageSearch(id, options);
+	L.Control.openCageGeocoding = function(id, options) {
+		return new L.Control.OpenCageGeocoding(id, options);
 	};
 
-	L.Control.OpenCageSearch.callbackId = 0;
-	L.Control.OpenCageSearch.jsonp = function(url, params, callback, context, jsonpParam) {
-		var callbackId = '_ocd_geocoder_' + (L.Control.OpenCageSearch.callbackId++);
+	L.Control.OpenCageGeocoding.callbackId = 0;
+	L.Control.OpenCageGeocoding.jsonp = function(url, params, callback, context, jsonpParam) {
+		var callbackId = '_ocd_geocoder_' + (L.Control.OpenCageGeocoding.callbackId++);
 
 		params[jsonpParam || 'callback'] = callbackId;
 		window[callbackId] = L.Util.bind(callback, context);
@@ -265,7 +275,7 @@
 		document.getElementsByTagName('head')[0].appendChild(script);
 	};
 
-	L.Control.OpenCageSearch.Geocoder = L.Class.extend({
+	L.Control.OpenCageGeocoding.Geocoder = L.Class.extend({
 		options: {
 			serviceUrl: 'https://api.opencagedata.com/geocode/v1/',
 			geocodingQueryParams: {},
@@ -285,7 +295,7 @@
 				proximity.proximity = center.lat + "," + center.lng;
 			}
 
-			L.Control.OpenCageSearch.jsonp(this.options.serviceUrl + 'json/', L.extend({
+			L.Control.OpenCageGeocoding.jsonp(this.options.serviceUrl + 'json/', L.extend({
 				q: query,
 				limit: this.options.limit,
 				key: this.options.key
@@ -338,9 +348,9 @@
 		}
 	});
 
-	L.Control.OpenCageSearch.geocoder = function(options) {
-		return new L.Control.OpenCageSearch.Geocoder(options);
+	L.Control.OpenCageGeocoding.geocoder = function(options) {
+		return new L.Control.OpenCageGeocoding.Geocoder(options);
 	};
 
-	return L.Control.OpenCageSearch;
+	return L.Control.OpenCageGeocoding;
 }));

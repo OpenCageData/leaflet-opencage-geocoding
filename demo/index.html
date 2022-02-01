@@ -8,10 +8,10 @@
   <meta charset="utf-8">
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="../dist/css/L.Control.OpenCageSearch.dev.css" />
+  <link rel="stylesheet" href="../dist/css/L.Control.OpenCageGeocoding.dev.css" />
 
   <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
-  <script src="../dist/js/L.Control.OpenCageSearch.dev.js"></script>
+  <script src="../dist/js/L.Control.OpenCageGeocoding.dev.js"></script>
 
   <style type="text/css">
     body {
@@ -32,8 +32,8 @@
       key: '3c38d15e76c02545181b07d3f8cfccf0', // REPLACE WITH YOUR API-KEY. This key might go away any time!
       limit: 10
     };
-    var geocoder = L.Control.OpenCageSearch.geocoder(options);
-    var control = L.Control.openCageSearch(options).addTo(map);
+    var geocoder = L.Control.OpenCageGeocoding.geocoder(options);
+    var control = L.Control.openCageGeocoding(options).addTo(map);
     var marker;
 
     /*
