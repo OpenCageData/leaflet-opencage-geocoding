@@ -1,5 +1,5 @@
 {
-  "name": "Leaflet.OpenCage.Search",
+  "name": "Leaflet.OpenCage.OpenGeocoding",
   "version": "1.4.2",
   "homepage": "https://opencagedata.com",
   "authors": ["support@opencagedata.com"],
