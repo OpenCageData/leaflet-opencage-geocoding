@@ -29,7 +29,7 @@
     "leaflet": "*"
   },
   "devDependencies": {
-    "grunt": "^1.0",
+    "grunt": "^1.5",
     "grunt-cli": "~1.4",
     "grunt-contrib-clean": "^2.0",
     "grunt-contrib-concat": "^1.0",
