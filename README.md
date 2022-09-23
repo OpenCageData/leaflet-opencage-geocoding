@@ -47,7 +47,7 @@ var options = {
   limit: 10,
 };
 var control = L.Control.openCageGeocoding(options).addTo(map);
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+L.tileLayer('http://tile.osm.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
