@@ -1,3 +1,22 @@
-/.DS_Store
+# Dependencies
+node_modules
 
-/node_modules/
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Local env files
+.env
+.env.local
+
+# Testing
+coverage
+coverage.json
+
+# Debug
+npm-debug.log*
+
+# Misc
+.DS_Store
+*.pem

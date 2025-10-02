@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Leaflet OpenCage Geocoding Control Demo</title>
+  <link rel="shortcut icon" href="https://opencagedata.com/favicon.ico" type="image/x-icon">
+
+  <meta name='viewport' content='width=device-width, user-scalable=no initial-scale=1, maximum-scale=1'>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="../dist/css/L.Control.OpenCageGeocoding.min.css" />
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <!-- <script src="../dist/js/L.Control.OpenCageGeocoding.dev.js"></script> -->
+  <script src="../dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+
+  <style type="text/css">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .info {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 300px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #27ae60;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>🌍 OpenCage Geocoding Control <span class="badge">v2.1</span></h1>
+  </div>
+
+  <div id="map"></div>
+
+  <div class="info">
+    <h3>✨ Modernization Features</h3>
+    <ul>
+      <li>🚀 <strong>Vite</strong> build system</li>
+      <li>🧪 <strong>Vitest</strong> unit testing</li>
+      <li>📦 <strong>ES Modules</strong> support</li>
+      <li>⚡ <strong>Modern JavaScript</strong> (ES6+)</li>
+      <li>🔧 <strong>Modular architecture</strong></li>
+    </ul>
+    <p><em>Try searching for a location above!</em></p>
+  </div>
+
+  <script type="text/javascript">
+    // Initialize map
+    const map = L.map('map').setView([51.52255, -0.10249], 13);
+
+    // Add tile layer with proper attribution
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Geocoding options
+    const options = {
+      key: '3c38d15e76c02545181b07d3f8cfccf0', // DEMO KEY - Replace with your API key
+      limit: 10,
+      placeholder: 'Search for places...',
+      errorMessage: 'Location not found. Try a different search.',
+      collapsed: true,
+      onResultClick: function (result) {
+        console.log('🎯 Result clicked:', result);
+      }
+    };
+    console.log('⏳ Loading OpenCage Geocoding Control...');
+
+    // Create and add the geocoding control
+    const control = L.Control.openCageGeocoding(options).addTo(map);
+
+    // Access the geocoder instance for programmatic searches and reverse geocoding
+    const geocoder = L.Control.OpenCageGeocoding.geocoder(options);
+    let marker;
+
+    // Add some demo functionality
+    console.log('🎉 Modernized OpenCage Geocoding Control loaded successfully!');
+    console.log('📊 Control instance:', control);
+    console.log('🔧 Available in global scope as L.Control.OpenCageGeocoding');
+
+    map.on('click', function (e) {
+      const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
+      geocoder.geocode(query, function (results) {
+        const r = results[0];
+        if (r) {
+          console.log('📌 Reverse geocoding result:', r);
+          if (marker) {
+            marker.setLatLng(r.center).setPopupContent(r.name).openPopup();
+          } else {
+            marker = L.marker(r.center).bindPopup(r.name).addTo(map).openPopup();
+          }
+        }
+      })
+    })
+
+
+    // Demo: Programmatic geocoding
+    setTimeout(() => {
+      console.log('🤖 Running programmatic search demo...');
+      geocoder.geocode('Brandenburg Gate, Berlin', function (results) {
+        if (results && results.length > 0) {
+          console.log('🗺️ Programmatic search result:', results[0]);
+        }
+      });
+    }, 2000);
+
+  </script>
+</body>
+
+</html>
