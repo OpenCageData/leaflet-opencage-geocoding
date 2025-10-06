@@ -8,17 +8,37 @@ Note: if you want location autosuggest then what you want is [OpenCage's geosear
 
 ## Installation
 
-You have three options
+Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
+
+### Via npm
+
+```bash
+npm install leaflet-opencage-geocoding
+```
+
+The package includes both UMD and ESM builds, which you can import based on your project setup:
+
+```javascript
+// ESM
+import 'leaflet-opencage-geocoding';
+
+// CommonJS
+require('leaflet-opencage-geocoding');
+```
+
+### Via CDN (for vanilla JS/HTML projects)
+
+For classic HTML projects, you can use the CDN:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+```
+
+### Other options
 
 - Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-geocoding.git`
-
-or
-
 - Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
-
-or
-
-- Install (using the old plugin's name) with Bower : `$ bower install Leaflet.OpenCage.Search`
 
 ## Configuration
 
@@ -36,8 +56,8 @@ two image files to a directory relative to the location of the control's CSS fil
 Load the plugin's CSS and JavaScript files:
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
 Add the plugin's control to an `L.Map` instance:

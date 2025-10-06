@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Use Node.js 20.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v5
         with:
           node-version: 22.x
@@ -54,8 +54,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build production
-        run: npm run build:prod
+      - name: Build
+        run: npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
