@@ -40,18 +40,7 @@ For classic HTML projects, you can use the CDN:
 - Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-geocoding.git`
 - Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
 
-## Configuration
-
-The control uses two image files that it expects to find in a directory with
-a path relative to the control's CSS files as `../images`. If you've installed
-the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Geocoding/dist/images/`. If you've
-cloned the control's GitHub repository or downloaded and unpacked an archive
-from GitHub, you'll find these in `dist/images`.
-
-Whichever installation method you've chosen, you'll need to move a copy of these
-two image files to a directory relative to the location of the control's CSS files.
-
-## Usage
+## Usage 
 
 Load the plugin's CSS and JavaScript files:
 
@@ -77,8 +66,8 @@ L.tileLayer('http://tile.osm.org/{z}/{x}/{y}.png', {
 
 ## Customizing
 
-By default, when a geocoding result is found, the control will center the map on it and place a marker
-at its location. This can be customized by overwriting the control's markGeocode function, to perform
+By default, when a geocoding result is found, the control will centre the map on it and place a marker
+at its location. This can be customised by overwriting the control's markGeocode function to perform
 any action desired.
 
 For example:
@@ -101,7 +90,7 @@ This will add a polygon representing the result's boundingbox when a result is s
 
 ## Options
 
-You can overwrite the following options, for example to translate.
+You can overwrite the following options, for example, to translate.
 
 ```javascript
 var options = {
@@ -132,7 +121,7 @@ See `CONTRIBUTING.md` file.
 
 ## Dependencies
 
-Leaflet version 0.7+
+Leaflet version 0.7+ to 1.9.x
 
 ## License
 
