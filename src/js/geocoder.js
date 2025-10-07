@@ -1,4 +1,32 @@
-import L from 'leaflet';
+import { LatLng, LatLngBounds } from 'leaflet';
+import { geocode } from 'opencage-api-client';
+/**
+ * Coerce the shapes Leaflet 1's `L.latLng()` accepted into a LatLng
+ *
+ * Leaflet 2 dropped the lowercase factory functions, and the `LatLng`
+ * constructor throws on bad input rather than returning null, so the shape is
+ * checked here first. Returns null for anything unusable.
+ *
+ * @private
+ */
+function toLatLng(location) {
+  if (location instanceof LatLng) {
+    return location;
+  }
+
+  if (Array.isArray(location) && location.length >= 2) {
+    return new LatLng(location[0], location[1]);
+  }
+
+  if (location && typeof location === 'object' && 'lat' in location) {
+    const lng = 'lng' in location ? location.lng : location.lon;
+    if (lng !== undefined) {
+      return new LatLng(location.lat, lng);
+    }
+  }
+
+  return null;
+}
 
 /**
  * Geocoder class for OpenCage API interactions
@@ -6,9 +34,7 @@ import L from 'leaflet';
 export class OpenCageGeocoder {
   constructor(options = {}) {
     this.options = {
-      serviceUrl: 'https://api.opencagedata.com/geocode/v1/json/',
       geocodingQueryParams: {},
-      reverseQueryParams: {},
       key: '',
       limit: 5,
       ...options,
@@ -41,19 +67,18 @@ export class OpenCageGeocoder {
    * Use `reverseQueryParams` to add parameters here. `limit` is omitted
    * because the API returns at most one reverse geocoding result.
    *
-   * @param {L.LatLng|Array|Object} location - Anything L.latLng() accepts:
-   *   an L.LatLng, [lat, lng] or {lat, lng}
+   * @param {LatLng|Array|Object} location - A LatLng, [lat, lng] or {lat, lng}
    * @param {number} scale - Ignored
    * @param {Function} callback - Callback function to handle results
    * @param {Object} context - Context object
    */
   reverse(location, scale, callback, context) {
-    const latLng = L.latLng(location);
+    const latLng = toLatLng(location);
 
     if (!latLng) {
       throw new TypeError(
         `Invalid location for reverse geocoding: ${JSON.stringify(location)}. ` +
-          'Expected an L.LatLng, [lat, lng] or {lat, lng}'
+          'Expected a LatLng, [lat, lng] or {lat, lng}'
       );
     }
 
@@ -71,7 +96,7 @@ export class OpenCageGeocoder {
    * @private
    */
   _request(params, callback, context) {
-    this._makeRequest(this.options.serviceUrl, params, (data) => {
+    this._makeRequest(params, (data) => {
       const results = this._processResults(data);
       callback.call(context, results);
     });
@@ -100,14 +125,14 @@ export class OpenCageGeocoder {
     for (let i = data.results.length - 1; i >= 0; i--) {
       results[i] = {
         name: data.results[i].formatted,
-        center: L.latLng(
+        center: new LatLng(
           data.results[i].geometry.lat,
           data.results[i].geometry.lng
         ),
       };
 
       if (data.results[i].bounds) {
-        results[i].bounds = L.latLngBounds(
+        results[i].bounds = new LatLngBounds(
           [
             data.results[i].bounds.southwest.lat,
             data.results[i].bounds.southwest.lng,
@@ -165,12 +190,10 @@ export class OpenCageGeocoder {
    *
    * @private
    */
-  _makeRequest(url, params, callback) {
-    const queryString = new URLSearchParams(params).toString();
+  _makeRequest(params, callback) {
     const noResults = { results: [] };
 
-    return fetch(`${url}?${queryString}`)
-      .then((response) => (response.ok ? response.json() : noResults))
+    return geocode(params)
       .catch(() => noResults)
       .then((data) => {
         try {

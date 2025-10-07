@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="shortcut icon" href="https://opencagedata.com/favicon.ico" type="image/x-icon">
+  <meta name='viewport' content='width=device-width, user-scalable=no initial-scale=1, maximum-scale=1'>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@2.0.0-alpha.1/dist/leaflet.css" />
+  <title>Dev Helper for Leaflet OpenCage Geocoding Control</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .info {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 5px;
+      max-width: 300px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #27ae60;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>🌍 OpenCage Geocoding Control <span class="badge">v3.0</span></h1>
+  </div>
+  <div id="map"></div>
+  <div id="app"></div>
+  <script type="module" src="/src/main-dev.js"></script>
+</body>
+
+</html>
