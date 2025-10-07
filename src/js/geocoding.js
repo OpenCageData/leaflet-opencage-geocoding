@@ -1,11 +1,11 @@
-import L from 'leaflet';
+import L, { Control, Marker } from 'leaflet';
 import { OpenCageGeocoder } from './geocoder.js';
-import '../css/L.Control.OpenCageGeocoding.css';
+import '../css/OpenCageGeocoding.css';
 
 /**
  * OpenCage Geocoding Control for Leaflet
  */
-export class OpenCageGeocodingControl extends L.Control {
+export class OpenCageGeocodingControl extends Control {
   constructor(options = {}) {
     super(options);
     this.options = {
@@ -47,7 +47,8 @@ export class OpenCageGeocodingControl extends L.Control {
     input.type = 'text';
     input.placeholder = this.options.placeholder;
 
-    L.DomEvent.addListener(input, 'keydown', this._keydown, this);
+    // L.DomEvent.addListener(input, 'keydown', this._keydown, this);
+    input.addEventListener('keydown', this._keydown, this);
 
     this._errorElement = document.createElement('div');
     this._errorElement.className = className + '-form-no-error';
@@ -63,12 +64,13 @@ export class OpenCageGeocodingControl extends L.Control {
     form.appendChild(this._errorElement);
     container.appendChild(this._alts);
 
-    L.DomEvent.addListener(form, 'submit', this._geocode, this);
+    // L.DomEvent.addListener(form, 'submit', this._geocode, this);
+    form.addEventListener('submit', this._geocode, this);
 
     if (this.options.collapsed) {
       if (this.options.expand === 'click') {
-        L.DomEvent.addListener(
-          icon,
+        // L.DomEvent.addListener(
+        icon.addEventListener(
           'click',
           (e) => {
             if (e.button === 0 && e.detail !== 2) {
@@ -78,8 +80,10 @@ export class OpenCageGeocodingControl extends L.Control {
           this
         );
       } else {
-        L.DomEvent.addListener(icon, 'mouseover', this._expand, this);
-        L.DomEvent.addListener(icon, 'mouseout', this._collapse, this);
+        // L.DomEvent.addListener(icon, 'mouseover', this._expand, this);
+        // L.DomEvent.addListener(icon, 'mouseout', this._collapse, this);
+        icon.addEventListener('mouseover', this._expand, this);
+        icon.addEventListener('mouseout', this._collapse, this);
         this._map.on('movestart', this._collapse, this);
       }
     } else {
@@ -136,7 +140,7 @@ export class OpenCageGeocodingControl extends L.Control {
       this._map.removeLayer(this._geocodeMarker);
     }
 
-    this._geocodeMarker = new L.Marker(result.center)
+    this._geocodeMarker = new Marker(result.center)
       .bindPopup(result.name)
       .addTo(this._map)
       .openPopup();
@@ -256,8 +260,8 @@ export class OpenCageGeocodingControl extends L.Control {
       result.name +
       '</a>';
 
-    L.DomEvent.addListener(
-      li,
+    // L.DomEvent.addListener(
+    li.addEventListener(
       'click',
       () => {
         this._geocodeResultSelected(result);
@@ -318,24 +322,3 @@ export class OpenCageGeocodingControl extends L.Control {
     return true;
   }
 }
-
-// Factory function for backwards compatibility
-const openCageGeocoding = (options) => {
-  return new OpenCageGeocodingControl(options);
-};
-
-// Attach geocoder to the control class
-OpenCageGeocodingControl.Geocoder = OpenCageGeocoder;
-OpenCageGeocodingControl.geocoder = (options) => {
-  return new OpenCageGeocoder(options);
-};
-
-// Attach to L.Control for global usage
-Object.assign(L.Control, {
-  OpenCageGeocoding: OpenCageGeocodingControl,
-  openCageGeocoding: openCageGeocoding,
-});
-
-// Export for ES modules
-export { OpenCageGeocoder, openCageGeocoding };
-export default OpenCageGeocodingControl;

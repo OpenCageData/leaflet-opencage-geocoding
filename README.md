@@ -1,6 +1,6 @@
 # OpenCage Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) geocoding control that uses OpenCage's [geocoding API](https://opencagedata.com).
+A [Leaflet](http://leafletjs.com/) geocodinng control that uses OpenCage's [geocoding API](https://opencagedata.com).
 
 Check out a demo page in `/demo`. Or take a look at the live [demo](https://opencagedata.com/tutorials/geocode-in-leaflet).
 
@@ -10,10 +10,16 @@ Note: if you want location autosuggest then what you want is [OpenCage's geosear
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
 
-### Via npm
+Starting with version 3, filenames have changed, there are no more `L.Control` prefixes.
+
+### Via npm, yarn or pnpm
 
 ```bash
 npm install leaflet-opencage-geocoding
+# or
+yarn add leaflet-opencage-geocoding
+# or
+pnpm add leaflet-opencage-geocoding
 ```
 
 The package includes both UMD and ESM builds, which you can import based on your project setup:
@@ -33,35 +39,34 @@ For classic HTML projects, you can use the CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css"
+  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0/dist/css/OpenCageGeocoding.min.css"
 />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "OpenCageGeocoding": "https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0/dist/js/OpenCageGeocoding.esm.js"
+    }
+  }
+</script>
 ```
-
-### Other options
-
-- Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-geocoding.git`
-- Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
 
 ## Usage
 
-Load the plugin's CSS and JavaScript files:
+Load the plugin's CSS and JavaScript files as shown in above:
 
-```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
-```
-
-Add the plugin's control to an `L.Map` instance:
+Add the plugin's control to a `Map` instance:
 
 ```javascript
-var map = L.map('map').setView([51.52255, -0.10249], 13);
-var options = {
+const map = new Map('map').setView([51.52255, -0.10249], 13);
+
+const options = {
   key: 'your-api-key-here',
   limit: 10,
 };
-var control = L.Control.openCageGeocoding(options).addTo(map);
-L.tileLayer('http://tile.osm.org/{z}/{x}/{y}.png', {
+const control = new OpenCageGeocoding(options).addTo(map);
+
+new TileLayer('http://tile.osm.org/{z}/{x}/{y}.png', {
   attribution:
     '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
@@ -76,10 +81,10 @@ any action desired.
 For example:
 
 ```javascript
-var control = L.Control.openCageGeocoding(options).addTo(map);
+const control = new OpenCageGeocoding(options).addTo(map);
 
 control.markGeocode = function (result) {
-  var bbox = result.bbox;
+  const bbox = result.bbox;
   L.polygon([
     bbox.getSouthEast(),
     bbox.getNorthEast(),
@@ -96,7 +101,7 @@ This will add a polygon representing the result's bounding box when a result is 
 You can overwrite the following options, for example, to translate.
 
 ```javascript
-var options = {
+const options = {
     key: '', // your OpenCage API key
     limit: 5 // number of results to be displayed
     position: 'topright',
@@ -114,21 +119,25 @@ var options = {
     } //if additional attributes from OpenCage search API should be added to the result
 };
 
-var control = L.Control.openCageGeocoding(options).addTo(map);
+const control = new OpenCageGeocoding(options).addTo(map);
 
 ```
 
 ## Contributing
 
-See `CONTRIBUTING.md` file.
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) file.
 
 ## Dependencies
 
-Leaflet version 0.7+ to 1.9.x
+Leaflet version 2.0.0+
 
 ## License
 
-See `LICENSE` file.
+See [`LICENSE`](./LICENSE) file.
+
+## Credits
+
+See [`CREDITS`](./CREDITS) file.
 
 ### Who is OpenCage GmbH?
 

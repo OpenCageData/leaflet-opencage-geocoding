@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'node:path';
 import fs from 'node:fs';
 
 // Read package.json for banner information
@@ -40,22 +39,71 @@ const RollupBannerPlugin = {
   },
 };
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const isProduction = mode === 'production';
+  const isDev = command === 'serve';
 
+  // Development server configuration with library build
+  if (isDev) {
+    return {
+      root: '.',
+      publicDir: false,
+      build: {
+        outDir: 'dist',
+        emptyOutDir: false,
+        watch: {},
+        lib: {
+          entry: 'src/js/index.js',
+          name: 'leaflet-control-opencage-geocoding',
+          formats: ['umd', 'es'],
+          fileName: (format) => {
+            if (format === 'es') {
+              return `js/OpenCageGeocoding.esm.js`;
+            }
+            return `js/OpenCageGeocoding.dev.js`;
+          },
+        },
+        rollupOptions: {
+          external: ['leaflet'],
+          plugins: [RollupBannerPlugin],
+          output: {
+            globals: {
+              leaflet: 'L',
+            },
+            exports: 'named',
+            assetFileNames: (assetInfo) => {
+              if (assetInfo.name.endsWith('.css')) {
+                return `css/OpenCageGeocoding.dev.css`;
+              }
+              if (assetInfo.name.match(/\.(png|gif|jpg|jpeg|svg)$/)) {
+                return 'images/[name][extname]';
+              }
+              return 'assets/[name][extname]';
+            },
+          },
+        },
+        minify: false,
+        sourcemap: true,
+        copyPublicDir: false,
+      },
+    };
+  }
+
+  // Production build configuration
   return {
     build: {
       outDir: 'dist',
       emptyOutDir: false, // Don't empty on each build since we're doing multiple builds
       lib: {
-        entry: resolve(__dirname, 'src/js/L.Control.OpenCageGeocoding.js'),
+        // entry: resolve(__dirname, 'src/js/index.js'),
+        entry: 'src/js/index.js',
         name: 'leaflet-control-opencage-geocoding',
         formats: isProduction ? ['umd'] : ['umd', 'es'],
         fileName: (format) => {
           if (format === 'es') {
-            return `js/L.Control.OpenCageGeocoding.esm.js`;
+            return `js/OpenCageGeocoding.esm.js`;
           }
-          return `js/L.Control.OpenCageGeocoding.${isProduction ? 'min' : 'dev'}.js`;
+          return `js/OpenCageGeocoding.${isProduction ? 'min' : 'dev'}.js`;
         },
       },
       rollupOptions: {
@@ -68,7 +116,7 @@ export default defineConfig(({ mode }) => {
           exports: 'named',
           assetFileNames: (assetInfo) => {
             if (assetInfo.name.endsWith('.css')) {
-              return `css/L.Control.OpenCageGeocoding.${isProduction ? 'min' : 'dev'}.css`;
+              return `css/OpenCageGeocoding.${isProduction ? 'min' : 'dev'}.css`;
             }
             if (assetInfo.name.match(/\.(png|gif|jpg|jpeg|svg)$/)) {
               return 'images/[name][extname]';
@@ -82,6 +130,5 @@ export default defineConfig(({ mode }) => {
       copyPublicDir: false,
     },
     publicDir: false,
-    assetsInclude: ['**/*.png', '**/*.gif'],
   };
 });

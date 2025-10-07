@@ -22,16 +22,15 @@ describe('OpenCageGeocoder', () => {
   describe('constructor', () => {
     it('should create geocoder with default options', () => {
       const defaultGeocoder = new OpenCageGeocoder();
-      expect(defaultGeocoder.options.serviceUrl).toBe(
-        'https://api.opencagedata.com/geocode/v1/json/'
-      );
       expect(defaultGeocoder.options.limit).toBe(5);
       expect(defaultGeocoder.options.key).toBe('');
+      expect(defaultGeocoder.options.geocodingQueryParams).toEqual({});
     });
 
     it('should create geocoder with custom options', () => {
       expect(geocoder.options.key).toBe('test-api-key');
       expect(geocoder.options.limit).toBe(3);
+      expect(geocoder.options.geocodingQueryParams).toEqual({});
     });
   });
 
@@ -98,7 +97,6 @@ describe('OpenCageGeocoder', () => {
       geocoder.geocode('London', mockCallback, mockContext);
 
       expect(mockMakeRequest).toHaveBeenCalledWith(
-        'https://api.opencagedata.com/geocode/v1/json/',
         expect.objectContaining({
           q: 'London',
           limit: 3,

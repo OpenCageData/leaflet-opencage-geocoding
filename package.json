@@ -1,6 +1,6 @@
 {
   "name": "@opencage/leaflet-opencage-geocoding",
-  "version": "2.1.0",
+  "version": "3.0.0-alpha.1",
   "type": "module",
   "description": "Leaflet plugin for geocoding via the OpenCage Geocoder API",
   "repository": {
@@ -23,9 +23,8 @@
     "opencagedata"
   ],
   "scripts": {
-    "build": "npm run clean && vite build && vite build --mode development && node scripts/copy-images.js",
-    "dev": "vite build --watch",
-    "preview": "vite preview  && open demo/demo.html",
+    "build": "npm run clean && vite build && vite build --mode development",
+    "dev": "vite",
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
@@ -34,13 +33,22 @@
     "format": "prettier --write \"**/*.+(js|json|md)\"",
     "clean": "rm -rf dist"
   },
-  "main": "dist/js/L.Control.OpenCageGeocoding.min.js",
-  "module": "dist/js/L.Control.OpenCageGeocoding.esm.js",
+  "main": "dist/js/OpenCageGeocoding.min.js",
+  "module": "dist/js/OpenCageGeocoding.esm.js",
+  "browser": "dist/js/OpenCageGeocoding.min.js",
+  "unpkg": "dist/js/OpenCageGeocoding.min.js",
+  "exports": {
+    ".": {
+      "import": "./dist/js/OpenCageGeocoding.esm.js",
+      "require": "./dist/js/OpenCageGeocoding.min.js"
+    }
+  },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "leaflet": "^1.9"
+    "leaflet": "2.0.0-alpha.1",
+    "opencage-api-client": "^2.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",

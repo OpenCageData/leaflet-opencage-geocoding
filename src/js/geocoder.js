@@ -1,14 +1,12 @@
-import L from 'leaflet';
-
+import { LatLng, LatLngBounds } from 'leaflet';
+import { geocode } from 'opencage-api-client';
 /**
  * Geocoder class for OpenCage API interactions
  */
 export class OpenCageGeocoder {
   constructor(options = {}) {
     this.options = {
-      serviceUrl: 'https://api.opencagedata.com/geocode/v1/json/',
       geocodingQueryParams: {},
-      reverseQueryParams: {},
       key: '',
       limit: 5,
       ...options,
@@ -32,7 +30,8 @@ export class OpenCageGeocoder {
       ...this.options.geocodingQueryParams,
     };
 
-    this._makeRequest(this.options.serviceUrl, params, (data) => {
+    // this._makeRequest(this.options.serviceUrl, params, (data) => {
+    this._makeRequest(params, (data) => {
       const results = this._processResults(data);
       callback.call(context, results);
     });
@@ -72,14 +71,14 @@ export class OpenCageGeocoder {
     for (let i = data.results.length - 1; i >= 0; i--) {
       results[i] = {
         name: data.results[i].formatted,
-        center: L.latLng(
+        center: new LatLng(
           data.results[i].geometry.lat,
           data.results[i].geometry.lng
         ),
       };
 
       if (data.results[i].bounds) {
-        results[i].bounds = L.latLngBounds(
+        results[i].bounds = new LatLngBounds(
           [
             data.results[i].bounds.southwest.lat,
             data.results[i].bounds.southwest.lng,
@@ -129,54 +128,12 @@ export class OpenCageGeocoder {
    * Make JSONP request to the API
    * @private
    */
-  _makeRequest(url, params, callback) {
-    return makeJsonpRequest(url, params, callback, this, 'jsonp');
+  // _makeRequest(url, params, callback) {
+  _makeRequest(params, callback) {
+    geocode(params).then((data) => {
+      callback(data);
+    });
   }
-}
-
-/**
- * Global callback counter for JSONP requests
- */
-let callbackId = 0;
-
-/**
- * Make a JSONP request
- * @param {string} url - Base URL
- * @param {Object} params - Parameters object
- * @param {Function} callback - Callback function
- * @param {Object} context - Context object
- * @param {string} jsonpParam - JSONP parameter name
- */
-export function makeJsonpRequest(url, params, callback, context, jsonpParam) {
-  const callbackName = '_ocd_geocoder_' + callbackId++;
-
-  params[jsonpParam || 'callback'] = callbackName;
-  window[callbackName] = function (data) {
-    callback.call(context, data);
-    // Cleanup
-    delete window[callbackName];
-    const script = document.getElementById(callbackName);
-    if (script && script.parentNode) {
-      script.parentNode.removeChild(script);
-    }
-  };
-
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = url + L.Util.getParamString(params);
-  script.id = callbackName;
-
-  script.addEventListener('error', () => {
-    callback.call(context, { results: [] });
-    delete window[callbackName];
-  });
-
-  script.addEventListener('abort', () => {
-    callback.call(context, { results: [] });
-    delete window[callbackName];
-  });
-
-  document.getElementsByTagName('head')[0].appendChild(script);
 }
 
 /**

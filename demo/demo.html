@@ -7,12 +7,7 @@
 
   <meta name='viewport' content='width=device-width, user-scalable=no initial-scale=1, maximum-scale=1'>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-  <link rel="stylesheet" href="../dist/css/L.Control.OpenCageGeocoding.min.css" />
-
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- <script src="../dist/js/L.Control.OpenCageGeocoding.dev.js"></script> -->
-  <script src="../dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@2.0.0-alpha.1/dist/leaflet.css" />
 
   <style type="text/css">
     body {
@@ -80,29 +75,28 @@
 
 <body>
   <div class="header">
-    <h1>🌍 OpenCage Geocoding Control <span class="badge">v2.1</span></h1>
+    <h1>🌍 OpenCage Geocoding Control <span class="badge">v3.0</span></h1>
   </div>
 
   <div id="map"></div>
 
-  <div class="info">
-    <h3>✨ Modernization Features</h3>
-    <ul>
-      <li>🚀 <strong>Vite</strong> build system</li>
-      <li>🧪 <strong>Vitest</strong> unit testing</li>
-      <li>📦 <strong>ES Modules</strong> support</li>
-      <li>⚡ <strong>Modern JavaScript</strong> (ES6+)</li>
-      <li>🔧 <strong>Modular architecture</strong></li>
-    </ul>
-    <p><em>Try searching for a location above!</em></p>
-  </div>
+  <script type="importmap">
+    {
+        "imports": {
+            "leaflet": "https://unpkg.com/leaflet@2.0.0-alpha.1/dist/leaflet.js",
+            "OpenCageGeocoding": "../dist/js/OpenCageGeocoding.esm.js"
+        }
+    }
+  </script>
+  <script type="module">
+    import L, { Map, TileLayer, Marker, Circle, Polygon, Popup } from 'leaflet';
+    import OpenCageGeocoding from 'OpenCageGeocoding';
 
-  <script type="text/javascript">
     // Initialize map
-    const map = L.map('map').setView([51.52255, -0.10249], 13);
+    const map = new Map('map').setView([51.52255, -0.10249], 13);
 
     // Add tile layer with proper attribution
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const tiles = new TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
@@ -119,17 +113,17 @@
     };
     console.log('⏳ Loading OpenCage Geocoding Control...');
 
-    // Create and add the geocoding control
-    const control = L.Control.openCageGeocoding(options).addTo(map);
+    // // Create and add the geocoding control
+    const control = new OpenCageGeocoding(options).addTo(map);
 
     // Access the geocoder instance for programmatic searches and reverse geocoding
-    const geocoder = L.Control.OpenCageGeocoding.geocoder(options);
+    const geocoder = OpenCageGeocoding.geocoder(options);
     let marker;
 
-    // Add some demo functionality
-    console.log('🎉 Modernized OpenCage Geocoding Control loaded successfully!');
-    console.log('📊 Control instance:', control);
-    console.log('🔧 Available in global scope as L.Control.OpenCageGeocoding');
+    // // Add some demo functionality
+    // console.log('🎉 Modernized OpenCage Geocoding Control loaded successfully!');
+    // console.log('📊 Control instance:', control);
+    // console.log('🔧 Available in global scope as L.Control.OpenCageGeocoding');
 
     map.on('click', function (e) {
       const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
