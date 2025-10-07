@@ -1,57 +1,76 @@
 ## Development and Production Versions
 
-Changes should to go the source files in `src/`. Then you run the build process
-outlines below to generate the production-ready files which go into `dist/`. E.g.
-those files are concatenated and minified.
+Changes should go into the source files in `src/`. Then you run the build process outlined below to generate the production-ready files which go into `dist/`. These files are bundled and minified for optimal performance.
 
 ## Rebuilding from Source
 
-The plugin's build process is managed by [Grunt](http://gruntjs.com/installing-grunt),
-which in turn is built on top of [Node.js](http://nodejs.org/). You'll need to have
-both of these applications installed on your machine to rebuild the plugin from source.
+The plugin's build process is managed by [Vite](https://vitejs.dev/), a modern build tool built on top of [Node.js](http://nodejs.org/). You'll need to have Node.js installed on your machine to rebuild the plugin from source.
 
-Assuming you have both Grunt and Node.js (version 10 or higher) installed, you can
-install all the build dependencies with a single command, from the plugin's root
-directory:
+Assuming you have Node.js (version 18 or higher) installed, you can install all the build dependencies with a single command, from the plugin's root directory:
 
-```shell
-$ yarn install
+```bash
+npm install
 ```
 
-This will install all of the plugin's dependencies into the `node_modules` directory
-(and which is also why you'll find this directory in the plugin's `.gitignore` file).
+This will install all of the plugin's dependencies into the `node_modules` directory (which is also why you'll find this directory in the plugin's `.gitignore` file).
 
-Once you have all the dependencies in place, you can rebuild the plugin from source
-by simply running `yarn build`:
+Once you have all the dependencies in place, you can rebuild the plugin from source by running `npm run build`:
 
-```shell
-$ yarn build
-yarn run v1.22.17
-# $ grunt
-Running "clean:dist" (clean) task
->> 3 paths cleaned.
+```bash
+npm run build
+```
 
-Running "jshint:files" (jshint) task
->> 1 file lint free.
+This command will:
 
-Running "concat:dist" (concat) task
+- Clean the `dist/` directory
+- Build both production (minified) and development versions
 
-Running "uglify:dist" (uglify) task
->> 1 file created 10.07 kB → 6.82 kB
+### Development Workflow
 
-Running "cssmin:minify" (cssmin) task
->> 1 file created. 2.83 kB → 2.18 kB
+For active development, you can use the watch mode to automatically rebuild when
+source files change:
 
-Running "copy:images" (copy) task
-Copied 2 files
+```bash
+npm run dev
+```
 
-Done.
-✨  Done in 0.59s.
+### Testing
+
+Run the test suite with:
+
+```bash
+npm run test
+```
+
+For watch mode during development:
+
+```bash
+npm run test:watch
+```
+
+For test coverage:
+
+```bash
+npm run test:coverage
+```
+
+### Formatting and Linting
+
+Format code with Prettier:
+
+```bash
+npm run format
+```
+
+Check code style with ESLint:
+
+```bash
+npm run lint
 ```
 
 ## Releasing
 
-1. update version in `bower.json` and `package.json`
+1. Update version in `package.json`
 
 2. git commit, git push
 

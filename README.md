@@ -1,6 +1,6 @@
 # OpenCage Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) geocodig control that uses OpenCage's [geocoding API](https://opencagedata.com).
+A [Leaflet](http://leafletjs.com/) geocoding control that uses OpenCage's [geocoding API](https://opencagedata.com).
 
 Check out a demo page in `/demo`. Or take a look at the live [demo](https://opencagedata.com/tutorials/geocode-in-leaflet).
 
@@ -31,7 +31,10 @@ require('leaflet-opencage-geocoding');
 For classic HTML projects, you can use the CDN:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css"
+/>
 <script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
@@ -40,7 +43,7 @@ For classic HTML projects, you can use the CDN:
 - Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-geocoding.git`
 - Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
 
-## Usage 
+## Usage
 
 Load the plugin's CSS and JavaScript files:
 
@@ -86,7 +89,7 @@ control.markGeocode = function (result) {
 };
 ```
 
-This will add a polygon representing the result's boundingbox when a result is selected.
+This will add a polygon representing the result's bounding box when a result is selected.
 
 ## Options
 
