@@ -47,8 +47,7 @@ export class OpenCageGeocodingControl extends Control {
     input.type = 'text';
     input.placeholder = this.options.placeholder;
 
-    // L.DomEvent.addListener(input, 'keydown', this._keydown, this);
-    input.addEventListener('keydown', this._keydown, this);
+    input.addEventListener('keydown', this._keydown.bind(this));
 
     this._errorElement = document.createElement('div');
     this._errorElement.className = className + '-form-no-error';
@@ -64,26 +63,18 @@ export class OpenCageGeocodingControl extends Control {
     form.appendChild(this._errorElement);
     container.appendChild(this._alts);
 
-    // L.DomEvent.addListener(form, 'submit', this._geocode, this);
-    form.addEventListener('submit', this._geocode, this);
+    form.addEventListener('submit', this._geocode.bind(this));
 
     if (this.options.collapsed) {
       if (this.options.expand === 'click') {
-        // L.DomEvent.addListener(
-        icon.addEventListener(
-          'click',
-          (e) => {
-            if (e.button === 0 && e.detail !== 2) {
-              this._toggle();
-            }
-          },
-          this
-        );
+        icon.addEventListener('click', (e) => {
+          if (e.button === 0 && e.detail !== 2) {
+            this._toggle();
+          }
+        });
       } else {
-        // L.DomEvent.addListener(icon, 'mouseover', this._expand, this);
-        // L.DomEvent.addListener(icon, 'mouseout', this._collapse, this);
-        icon.addEventListener('mouseover', this._expand, this);
-        icon.addEventListener('mouseout', this._collapse, this);
+        icon.addEventListener('mouseover', this._expand.bind(this));
+        icon.addEventListener('mouseout', this._collapse.bind(this));
         this._map.on('movestart', this._collapse, this);
       }
     } else {
@@ -99,8 +90,7 @@ export class OpenCageGeocodingControl extends Control {
    * Handle geocoding results
    */
   _geocodeResult(results) {
-    L.DomUtil.removeClass(
-      this._container,
+    this._container.classList.remove(
       'leaflet-control-opencage-geocoding-spinner'
     );
 
@@ -109,16 +99,14 @@ export class OpenCageGeocodingControl extends Control {
     } else if (results.length > 0) {
       this._alts.innerHTML = '';
       this._results = results;
-      L.DomUtil.removeClass(
-        this._alts,
+      this._alts.classList.remove(
         'leaflet-control-opencage-geocoding-alternatives-minimized'
       );
       for (let i = 0; i < results.length; i++) {
         this._alts.appendChild(this._createAlt(results[i], i));
       }
     } else {
-      L.DomUtil.addClass(
-        this._errorElement,
+      this._errorElement.classList.add(
         'leaflet-control-opencage-geocoding-error'
       );
     }
@@ -154,10 +142,8 @@ export class OpenCageGeocodingControl extends Control {
   _geocode(event) {
     L.DomEvent.preventDefault(event);
 
-    L.DomUtil.addClass(
-      this._container,
-      'leaflet-control-opencage-geocoding-spinner'
-    );
+    this._container.classList.add('leaflet-control-opencage-geocoding-spinner');
+    // this.classList.add('leaflet-control-opencage-geocoding-spinner');
     this._clearResults();
     this.options.geocoder.geocode(this._input.value, this._geocodeResult, this);
 
@@ -205,8 +191,7 @@ export class OpenCageGeocodingControl extends Control {
    * Expand the control
    */
   _expand() {
-    L.DomUtil.addClass(
-      this._container,
+    this._container.classList.add(
       'leaflet-control-opencage-geocoding-expanded'
     );
     this._input.select();
@@ -220,12 +205,10 @@ export class OpenCageGeocodingControl extends Control {
       ' leaflet-control-opencage-geocoding-expanded',
       ''
     );
-    L.DomUtil.addClass(
-      this._alts,
+    this._alts.classList.add(
       'leaflet-control-opencage-geocoding-alternatives-minimized'
     );
-    L.DomUtil.removeClass(
-      this._errorElement,
+    this._errorElement.classList.remove(
       'leaflet-control-opencage-geocoding-error'
     );
   }
@@ -234,13 +217,11 @@ export class OpenCageGeocodingControl extends Control {
    * Clear results display
    */
   _clearResults() {
-    L.DomUtil.addClass(
-      this._alts,
+    this._alts.classList.add(
       'leaflet-control-opencage-geocoding-alternatives-minimized'
     );
     this._selection = null;
-    L.DomUtil.removeClass(
-      this._errorElement,
+    this._errorElement.classList.remove(
       'leaflet-control-opencage-geocoding-error'
     );
   }
@@ -261,13 +242,9 @@ export class OpenCageGeocodingControl extends Control {
       '</a>';
 
     // L.DomEvent.addListener(
-    li.addEventListener(
-      'click',
-      () => {
-        this._geocodeResultSelected(result);
-      },
-      this
-    );
+    li.addEventListener('click', () => {
+      this._geocodeResultSelected(result);
+    });
 
     return li;
   }
@@ -278,8 +255,7 @@ export class OpenCageGeocodingControl extends Control {
   _keydown(e) {
     const select = (dir) => {
       if (this._selection) {
-        L.DomUtil.removeClass(
-          this._selection.firstChild,
+        this._selection.firstChild.classList.remove(
           'leaflet-control-opencage-geocoding-selected'
         );
         this._selection =
@@ -291,8 +267,7 @@ export class OpenCageGeocodingControl extends Control {
       }
 
       if (this._selection) {
-        L.DomUtil.addClass(
-          this._selection.firstChild,
+        this._selection.firstChild.classList.add(
           'leaflet-control-opencage-geocoding-selected'
         );
       }

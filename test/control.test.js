@@ -74,7 +74,7 @@ describe('OpenCageGeocodingControl', () => {
     });
   });
 
-  describe.skip('_toggle', () => {
+  describe('_toggle', () => {
     beforeEach(() => {
       control.onAdd(mockMap);
     });
@@ -97,7 +97,7 @@ describe('OpenCageGeocodingControl', () => {
     });
   });
 
-  describe.skip('_geocodeResultSelected', () => {
+  describe('_geocodeResultSelected', () => {
     const mockResult = {
       name: 'Test Location',
       center: { lat: 51.5, lng: -0.1 },

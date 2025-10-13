@@ -8,6 +8,7 @@
   <meta name='viewport' content='width=device-width, user-scalable=no initial-scale=1, maximum-scale=1'>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@2.0.0-alpha.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="../dist/css/OpenCageGeocoding.dev.css" />
 
   <style type="text/css">
     body {
@@ -120,11 +121,8 @@
     const geocoder = OpenCageGeocoding.geocoder(options);
     let marker;
 
-    // // Add some demo functionality
-    // console.log('🎉 Modernized OpenCage Geocoding Control loaded successfully!');
-    // console.log('📊 Control instance:', control);
-    // console.log('🔧 Available in global scope as L.Control.OpenCageGeocoding');
-
+    // Demo: Reverse geocoding on map click
+    console.log('🤖 Click on the map to perform reverse geocoding...');
     map.on('click', function (e) {
       const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
       geocoder.geocode(query, function (results) {
@@ -134,11 +132,11 @@
           if (marker) {
             marker.setLatLng(r.center).setPopupContent(r.name).openPopup();
           } else {
-            marker = L.marker(r.center).bindPopup(r.name).addTo(map).openPopup();
+            marker = new Marker(r.center).bindPopup(r.name).addTo(map).openPopup();
           }
         }
-      })
-    })
+      });
+    });
 
 
     // Demo: Programmatic geocoding

@@ -31,23 +31,16 @@ const options = {
 };
 
 console.log('⏳ Loading OpenCage Geocoding Control...');
-// const control1 =
+
 new OpenCageGeocoding(options).addTo(map);
 // or using the factory function
-// const control2 =
 openCageGeocoding(options);
 
 const geocoder = new OpenCageGeocoder(options);
 let marker;
 
-// Demo: Programmatic geocoding
-console.log('🤖 Running programmatic search demo...');
-geocoder.geocode('Brandenburg Gate, Berlin', function (results) {
-  if (results && results.length > 0) {
-    console.log('🗺️ Programmatic search result:', results[0]);
-  }
-});
-
+// Demo: Reverse geocoding on map click
+console.log('🤖 Click on the map to perform reverse geocoding...');
 map.on('click', function (e) {
   const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
   geocoder.geocode(query, function (results) {
@@ -61,4 +54,12 @@ map.on('click', function (e) {
       }
     }
   });
+});
+
+// Demo: Programmatic geocoding
+console.log('🤖 Running programmatic search demo...');
+geocoder.geocode('Brandenburg Gate, Berlin', function (results) {
+  if (results && results.length > 0) {
+    console.log('🗺️ Programmatic search result:', results[0]);
+  }
 });

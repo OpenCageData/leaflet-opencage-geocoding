@@ -11,7 +11,7 @@ const banner = `/**
  * ${pkg.author.url} 
  * 
  * Licensed under the ${pkg.license} license. 
- * Demo: ${pkg.homepage} 
+ * Demo: https://opencagedata.com/tutorials/geocode-in-leaflet
  * Source: ${pkg.repository.url} 
  */
 `;
@@ -95,7 +95,6 @@ export default defineConfig(({ mode, command }) => {
       outDir: 'dist',
       emptyOutDir: false, // Don't empty on each build since we're doing multiple builds
       lib: {
-        // entry: resolve(__dirname, 'src/js/index.js'),
         entry: 'src/js/index.js',
         name: 'leaflet-control-opencage-geocoding',
         formats: isProduction ? ['umd'] : ['umd', 'es'],

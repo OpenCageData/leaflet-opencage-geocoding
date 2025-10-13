@@ -6,11 +6,11 @@ Check out a demo page in `/demo`. Or take a look at the live [demo](https://open
 
 Note: if you want location autosuggest then what you want is [OpenCage's geosearch](https://opencagedata.com/geosearch), not geocoding.
 
+## Breaking changes
+
+Starting with version 3, Leaflet version supported is 2.0 and superiors; for CDN usage, the filenames have changed, there are no more `L.Control` prefixes.
+
 ## Installation
-
-Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
-
-Starting with version 3, filenames have changed, there are no more `L.Control` prefixes.
 
 ### Via npm, yarn or pnpm
 
@@ -39,13 +39,13 @@ For classic HTML projects, you can use the CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0/dist/css/OpenCageGeocoding.min.css"
+  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0-alpha.1/dist/css/OpenCageGeocoding.min.css"
 />
 
 <script type="importmap">
   {
     "imports": {
-      "OpenCageGeocoding": "https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0/dist/js/OpenCageGeocoding.esm.js"
+      "OpenCageGeocoding": "https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v3.0.0-alpha.1/dist/js/OpenCageGeocoding.esm.js"
     }
   }
 </script>
@@ -85,7 +85,7 @@ const control = new OpenCageGeocoding(options).addTo(map);
 
 control.markGeocode = function (result) {
   const bbox = result.bbox;
-  L.polygon([
+  new Polygon([
     bbox.getSouthEast(),
     bbox.getNorthEast(),
     bbox.getNorthWest(),
