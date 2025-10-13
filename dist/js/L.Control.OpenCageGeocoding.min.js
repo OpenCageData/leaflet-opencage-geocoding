@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.1.0-alpha.1 - 2025-10-06
+ * OpenCage Data Geocoding Control v2.1.0-alpha.1 - 2025-10-13
  * Copyright (c) 2025, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 

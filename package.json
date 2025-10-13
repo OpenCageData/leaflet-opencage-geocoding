@@ -1,6 +1,6 @@
 {
   "name": "@opencage/leaflet-opencage-geocoding",
-  "version": "2.1.0",
+  "version": "2.1.0-alpha.1",
   "type": "module",
   "description": "Leaflet plugin for geocoding via the OpenCage Geocoder API",
   "repository": {
