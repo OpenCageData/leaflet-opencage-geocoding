@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v3.0.0-alpha.1 - 2025-10-13
+ * OpenCage Data Geocoding Control v3.0.0-alpha.2 - 2025-10-14
  * Copyright (c) 2025, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -9,112 +9,9 @@
  * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
  */
 (function(global, factory) {
-  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("leaflet")) : typeof define === "function" && define.amd ? define(["exports", "leaflet"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global["leaflet-control-opencage-geocoding"] = {}, global.L));
-})(this, (function(exports2, L$1) {
+  typeof exports === "object" && typeof module !== "undefined" ? factory(exports, require("leaflet"), require("opencage-api-client")) : typeof define === "function" && define.amd ? define(["exports", "leaflet", "opencage-api-client"], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, factory(global["leaflet-control-opencage-geocoding"] = {}, global.L, global.opencageApiClient));
+})(this, (function(exports2, L$1, opencageApiClient) {
   "use strict";
-  class GeocodeError extends Error {
-    response;
-    status;
-    constructor(message) {
-      super(message);
-      this.name = "GeocodeError";
-    }
-  }
-  const version = "2.0.1";
-  const USER_AGENT = `OpenCageData Geocoding NodeJS API Client/${version}`;
-  function checkFetchStatus(response) {
-    if (response.status >= 200 && response.status < 300) return response;
-    const message = response.statusText || `HTTP error ${response.status}`;
-    const error = new GeocodeError(message);
-    error.status = {
-      code: response.status,
-      message
-    };
-    error.response = response;
-    throw error;
-  }
-  function parseJSON(response) {
-    return response.json();
-  }
-  async function fetchUrl(url, resolve, reject, signal) {
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "User-Agent": USER_AGENT,
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      signal
-    }).then(checkFetchStatus).then(parseJSON).then((data) => {
-      resolve(data);
-    }).catch((error) => {
-      reject(error);
-    });
-  }
-  const OPENCAGEDATA_JSON_URL = "https://api.opencagedata.com/geocode/v1/json";
-  function buildValidationError(code, message) {
-    const error = new GeocodeError(message);
-    const status = {
-      code,
-      message
-    };
-    error.status = status;
-    error.response = {
-      status
-    };
-    return error;
-  }
-  function isUndefinedOrEmpty(param) {
-    return void 0 === param || "" === param;
-  }
-  function isUndefinedOrNull(param) {
-    return null == param;
-  }
-  function buildQueryString(input) {
-    if (isUndefinedOrNull(input)) return "";
-    return Object.keys(input).map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(input[key] || "")}`).join("&");
-  }
-  function buildQuery(input, options) {
-    const query = {
-      ...input
-    };
-    let endpoint = OPENCAGEDATA_JSON_URL;
-    let missingKey = false;
-    if (isUndefinedOrEmpty(input.proxyURL) && isUndefinedOrEmpty(options?.proxyURL)) {
-      if (isUndefinedOrEmpty(input.key) && "undefined" != typeof process) query.key = process.env.OPENCAGE_API_KEY;
-      if (isUndefinedOrEmpty(query.key)) missingKey = true;
-    } else {
-      endpoint = options?.proxyURL;
-      if (isUndefinedOrEmpty(endpoint)) endpoint = input.proxyURL;
-      delete query.proxyURL;
-    }
-    return {
-      missingKey,
-      endpoint,
-      query
-    };
-  }
-  const MISSING_OR_BAD_QUERY = "missing or bad query";
-  const MISSING_API_KEY = "missing API key";
-  async function geocode(input, options) {
-    return new Promise((resolve, reject) => {
-      if (isUndefinedOrNull(input)) {
-        const error = buildValidationError(400, MISSING_OR_BAD_QUERY);
-        reject(error);
-        return;
-      }
-      const params = buildQuery(input, options);
-      if (params.missingKey) {
-        const error = buildValidationError(401, MISSING_API_KEY);
-        reject(error);
-        return;
-      }
-      const { query, endpoint } = params;
-      const qs = buildQueryString(query);
-      const url = `${endpoint}?${qs}`;
-      fetchUrl(url, resolve, reject, options?.signal);
-    });
-  }
   class OpenCageGeocoder {
     constructor(options = {}) {
       this.options = {
@@ -227,7 +124,7 @@
      */
     // _makeRequest(url, params, callback) {
     _makeRequest(params, callback) {
-      geocode(params).then((data) => {
+      opencageApiClient.geocode(params).then((data) => {
         callback(data);
       });
     }

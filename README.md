@@ -1,16 +1,21 @@
 # OpenCage Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) geocodinng control that uses OpenCage's [geocoding API](https://opencagedata.com).
+A [Leaflet](http://leafletjs.com/) geocoding control that uses OpenCage's [geocoding API](https://opencagedata.com).
 
 Check out a demo page in `/demo`. Or take a look at the live [demo](https://opencagedata.com/tutorials/geocode-in-leaflet).
 
-Note: if you want location autosuggest then what you want is [OpenCage's geosearch](https://opencagedata.com/geosearch), not geocoding.
+Note: if you want location autosuggest, then what you want is [OpenCage's geosearch](https://opencagedata.com/geosearch), not geocoding.
+
+## Dependencies
+
+- [Leaflet](https://www.npmjs.com/package/leaflet) version 2.0.0+
+- [opencage-api-client](https://www.npmjs.com/package/opencage-api-client) version 2+
 
 ## Breaking changes
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
 
-Starting with version 3, Leaflet version supported is 2.0 and superiors; for CDN usage, the filenames have changed, there are no more `L.Control` prefixes.
+Starting with version 3, the supported Leaflet version is 2.0 and superior; for CDN usage, the filenames have changed, and there are no more `L.Control` prefixes.
 
 ## Installation
 
@@ -157,10 +162,6 @@ array or `{lat, lng}`. It throws a `TypeError` for anything else.
 ## Contributing
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) file.
-
-## Dependencies
-
-Leaflet version 2.0.0+
 
 ## License
 
