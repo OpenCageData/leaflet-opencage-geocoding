@@ -1,6 +1,6 @@
 {
   "name": "@opencage/leaflet-opencage-geocoding",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "type": "module",
   "description": "Leaflet plugin for geocoding via the OpenCage Geocoder API",
   "repository": {
@@ -49,6 +49,10 @@
   "dependencies": {
     "leaflet": "2.0.0-alpha.1",
     "opencage-api-client": "^2.0.1"
+  },
+  "peerDependencies": {
+    "leaflet": "^2",
+    "opencage-api-client": "^2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",

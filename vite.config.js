@@ -50,41 +50,13 @@ export default defineConfig(({ mode, command }) => {
       publicDir: false,
       build: {
         outDir: 'dist',
-        emptyOutDir: false,
         watch: {},
-        lib: {
-          entry: 'src/js/index.js',
-          name: 'leaflet-control-opencage-geocoding',
-          formats: ['umd', 'es'],
-          fileName: (format) => {
-            if (format === 'es') {
-              return `js/OpenCageGeocoding.esm.js`;
-            }
-            return `js/OpenCageGeocoding.dev.js`;
-          },
-        },
-        rollupOptions: {
-          external: ['leaflet'],
-          plugins: [RollupBannerPlugin],
-          output: {
-            globals: {
-              leaflet: 'L',
-            },
-            exports: 'named',
-            assetFileNames: (assetInfo) => {
-              if (assetInfo.name.endsWith('.css')) {
-                return `css/OpenCageGeocoding.dev.css`;
-              }
-              if (assetInfo.name.match(/\.(png|gif|jpg|jpeg|svg)$/)) {
-                return 'images/[name][extname]';
-              }
-              return 'assets/[name][extname]';
-            },
-          },
-        },
-        minify: false,
-        sourcemap: true,
-        copyPublicDir: false,
+        // lib: {
+        //   entry: 'src/js/index.js',
+        //   name: 'leaflet-control-opencage-geocoding',
+        //   formats: 'es',
+        //   fileName: `js/OpenCageGeocoding.esm.js`,
+        // },
       },
     };
   }
@@ -106,7 +78,7 @@ export default defineConfig(({ mode, command }) => {
         },
       },
       rollupOptions: {
-        external: ['leaflet'],
+        external: ['leaflet', 'opencage-api-client'],
         plugins: [RollupBannerPlugin],
         output: {
           globals: {
