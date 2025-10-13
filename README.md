@@ -6,9 +6,15 @@ Check out a demo page in `/demo`. Or take a look at the live [demo](https://open
 
 Note: if you want location autosuggest then what you want is [OpenCage's geosearch](https://opencagedata.com/geosearch), not geocoding.
 
-## Installation
+## Dependencies
+
+Leaflet version 0.7+ to 1.9.x
+
+## Breaking changes
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
+
+## Installation
 
 ### Via npm
 
@@ -121,10 +127,6 @@ var control = L.Control.openCageGeocoding(options).addTo(map);
 ## Contributing
 
 See `CONTRIBUTING.md` file.
-
-## Dependencies
-
-Leaflet version 0.7+ to 1.9.x
 
 ## License
 
