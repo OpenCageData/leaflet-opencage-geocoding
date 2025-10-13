@@ -12,7 +12,7 @@ const banner = `/**
  * ${pkg.author.url} 
  * 
  * Licensed under the ${pkg.license} license. 
- * Demo: ${pkg.homepage} 
+ * Demo: https://opencagedata.com/tutorials/geocode-in-leaflet
  * Source: ${pkg.repository.url} 
  */
 `;

@@ -1,11 +1,11 @@
 /**
- * OpenCage Data Geocoding Control v3.0.0-alpha.1 - 2025-10-07
+ * OpenCage Data Geocoding Control v3.0.0-alpha.1 - 2025-10-13
  * Copyright (c) 2025, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
  * 
  * Licensed under the BSD license. 
- * Demo: https://opencagedata.com 
+ * Demo: https://opencagedata.com/tutorials/geocode-in-leaflet
  * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
  */
 (function(global, factory) {
@@ -269,7 +269,7 @@
       this._input = input;
       input.type = "text";
       input.placeholder = this.options.placeholder;
-      input.addEventListener("keydown", this._keydown, this);
+      input.addEventListener("keydown", this._keydown.bind(this));
       this._errorElement = document.createElement("div");
       this._errorElement.className = className + "-form-no-error";
       this._errorElement.innerHTML = this.options.errorMessage;
@@ -280,21 +280,17 @@
       form.appendChild(input);
       form.appendChild(this._errorElement);
       container.appendChild(this._alts);
-      form.addEventListener("submit", this._geocode, this);
+      form.addEventListener("submit", this._geocode.bind(this));
       if (this.options.collapsed) {
         if (this.options.expand === "click") {
-          icon.addEventListener(
-            "click",
-            (e) => {
-              if (e.button === 0 && e.detail !== 2) {
-                this._toggle();
-              }
-            },
-            this
-          );
+          icon.addEventListener("click", (e) => {
+            if (e.button === 0 && e.detail !== 2) {
+              this._toggle();
+            }
+          });
         } else {
-          icon.addEventListener("mouseover", this._expand, this);
-          icon.addEventListener("mouseout", this._collapse, this);
+          icon.addEventListener("mouseover", this._expand.bind(this));
+          icon.addEventListener("mouseout", this._collapse.bind(this));
           this._map.on("movestart", this._collapse, this);
         }
       } else {
@@ -307,8 +303,7 @@
      * Handle geocoding results
      */
     _geocodeResult(results) {
-      L$1.DomUtil.removeClass(
-        this._container,
+      this._container.classList.remove(
         "leaflet-control-opencage-geocoding-spinner"
       );
       if (results.length === 1) {
@@ -316,16 +311,14 @@
       } else if (results.length > 0) {
         this._alts.innerHTML = "";
         this._results = results;
-        L$1.DomUtil.removeClass(
-          this._alts,
+        this._alts.classList.remove(
           "leaflet-control-opencage-geocoding-alternatives-minimized"
         );
         for (let i = 0; i < results.length; i++) {
           this._alts.appendChild(this._createAlt(results[i], i));
         }
       } else {
-        L$1.DomUtil.addClass(
-          this._errorElement,
+        this._errorElement.classList.add(
           "leaflet-control-opencage-geocoding-error"
         );
       }
@@ -350,10 +343,7 @@
      */
     _geocode(event) {
       L$1.DomEvent.preventDefault(event);
-      L$1.DomUtil.addClass(
-        this._container,
-        "leaflet-control-opencage-geocoding-spinner"
-      );
+      this._container.classList.add("leaflet-control-opencage-geocoding-spinner");
       this._clearResults();
       this.options.geocoder.geocode(this._input.value, this._geocodeResult, this);
       return false;
@@ -390,8 +380,7 @@
      * Expand the control
      */
     _expand() {
-      L$1.DomUtil.addClass(
-        this._container,
+      this._container.classList.add(
         "leaflet-control-opencage-geocoding-expanded"
       );
       this._input.select();
@@ -404,12 +393,10 @@
         " leaflet-control-opencage-geocoding-expanded",
         ""
       );
-      L$1.DomUtil.addClass(
-        this._alts,
+      this._alts.classList.add(
         "leaflet-control-opencage-geocoding-alternatives-minimized"
       );
-      L$1.DomUtil.removeClass(
-        this._errorElement,
+      this._errorElement.classList.remove(
         "leaflet-control-opencage-geocoding-error"
       );
     }
@@ -417,13 +404,11 @@
      * Clear results display
      */
     _clearResults() {
-      L$1.DomUtil.addClass(
-        this._alts,
+      this._alts.classList.add(
         "leaflet-control-opencage-geocoding-alternatives-minimized"
       );
       this._selection = null;
-      L$1.DomUtil.removeClass(
-        this._errorElement,
+      this._errorElement.classList.remove(
         "leaflet-control-opencage-geocoding-error"
       );
     }
@@ -433,13 +418,9 @@
     _createAlt(result, index) {
       const li = document.createElement("li");
       li.innerHTML = '<a href="#" data-result-index="' + index + '">' + (this.options.showResultIcons && result.icon ? '<img src="' + result.icon + '"/>' : "") + result.name + "</a>";
-      li.addEventListener(
-        "click",
-        () => {
-          this._geocodeResultSelected(result);
-        },
-        this
-      );
+      li.addEventListener("click", () => {
+        this._geocodeResultSelected(result);
+      });
       return li;
     }
     /**
@@ -448,8 +429,7 @@
     _keydown(e) {
       const select = (dir) => {
         if (this._selection) {
-          L$1.DomUtil.removeClass(
-            this._selection.firstChild,
+          this._selection.firstChild.classList.remove(
             "leaflet-control-opencage-geocoding-selected"
           );
           this._selection = this._selection[dir > 0 ? "nextSibling" : "previousSibling"];
@@ -458,8 +438,7 @@
           this._selection = this._alts[dir > 0 ? "firstChild" : "lastChild"];
         }
         if (this._selection) {
-          L$1.DomUtil.addClass(
-            this._selection.firstChild,
+          this._selection.firstChild.classList.add(
             "leaflet-control-opencage-geocoding-selected"
           );
         }
