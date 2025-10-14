@@ -1,43 +1,61 @@
 # OpenCage Geocoding Control for Leaflet
 
-A [Leaflet](http://leafletjs.com/) geocodig control that uses OpenCage's [geocoding API](https://opencagedata.com).
+A [Leaflet](http://leafletjs.com/) geocoding control that uses OpenCage's [geocoding API](https://opencagedata.com).
 
 Check out a demo page in `/demo`. Or take a look at the live [demo](https://opencagedata.com/tutorials/geocode-in-leaflet).
 
 Note: if you want location autosuggest then what you want is [OpenCage's geosearch](https://opencagedata.com/geosearch), not geocoding.
 
+## Dependencies
+
+Leaflet version 0.7+ to 1.9.x
+
+## Breaking changes
+
+Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
+
 ## Installation
 
-You have three options
+### Via npm
+
+```bash
+npm install leaflet-opencage-geocoding
+```
+
+The package includes both UMD and ESM builds, which you can import based on your project setup:
+
+```javascript
+// ESM
+import 'leaflet-opencage-geocoding';
+
+// CommonJS
+require('leaflet-opencage-geocoding');
+```
+
+### Via CDN (for vanilla JS/HTML projects)
+
+For classic HTML projects, you can use the CDN:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+```
+
+### Other options
 
 - Clone from GitHub: `git@github.com:opencagedata/leaflet-opencage-geocoding.git`
-
-or
-
 - Download a [zip or tarball archive](https://github.com/opencagedata/leaflet-opencage-geocoding/tags)
-
-or
-
-- Install (using the old plugin's name) with Bower : `$ bower install Leaflet.OpenCage.Search`
-
-## Configuration
-
-The control uses two image files that it expects to find in a directory with
-a path relative to the control's CSS files as `../images`. If you've installed
-the control using Bower you'll find these in `bower_components/Leaflet.OpenCage.Geocoding/dist/images/`. If you've
-cloned the control's GitHub repository or downloaded and unpacked an archive
-from GitHub, you'll find these in `dist/images`.
-
-Whichever installation method you've chosen, you'll need to move a copy of these
-two image files to a directory relative to the location of the control's CSS files.
 
 ## Usage
 
 Load the plugin's CSS and JavaScript files:
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.0.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
 Add the plugin's control to an `L.Map` instance:
@@ -57,8 +75,8 @@ L.tileLayer('http://tile.osm.org/{z}/{x}/{y}.png', {
 
 ## Customizing
 
-By default, when a geocoding result is found, the control will center the map on it and place a marker
-at its location. This can be customized by overwriting the control's markGeocode function, to perform
+By default, when a geocoding result is found, the control will centre the map on it and place a marker
+at its location. This can be customised by overwriting the control's markGeocode function to perform
 any action desired.
 
 For example:
@@ -77,11 +95,11 @@ control.markGeocode = function (result) {
 };
 ```
 
-This will add a polygon representing the result's boundingbox when a result is selected.
+This will add a polygon representing the result's bounding box when a result is selected.
 
 ## Options
 
-You can overwrite the following options, for example to translate.
+You can overwrite the following options, for example, to translate.
 
 ```javascript
 var options = {
@@ -109,10 +127,6 @@ var control = L.Control.openCageGeocoding(options).addTo(map);
 ## Contributing
 
 See `CONTRIBUTING.md` file.
-
-## Dependencies
-
-Leaflet version 0.7+
 
 ## License
 
