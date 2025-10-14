@@ -10,6 +10,8 @@ Note: if you want location autosuggest then what you want is [OpenCage's geosear
 
 Leaflet version 0.7+ to 1.9.x
 
+For Leaflet version 2: check the [release branch v3.x](https://github.com/OpenCageData/leaflet-opencage-geocoding/tree/release/v3.0.0)
+
 ## Breaking changes
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
