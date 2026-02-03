@@ -51,12 +51,12 @@ export class OpenCageGeocodingControl extends Control {
 
     this._errorElement = document.createElement('div');
     this._errorElement.className = className + '-form-no-error';
-    this._errorElement.innerHTML = this.options.errorMessage;
+    this._errorElement.innerText = this.options.errorMessage;
 
     this._alts = L.DomUtil.create(
       'ul',
       className +
-        '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized'
+      '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized'
     );
 
     form.appendChild(input);
@@ -97,7 +97,7 @@ export class OpenCageGeocodingControl extends Control {
     if (results.length === 1) {
       this._geocodeResultSelected(results[0]);
     } else if (results.length > 0) {
-      this._alts.innerHTML = '';
+      this._alts.innerText = '';
       this._results = results;
       this._alts.classList.remove(
         'leaflet-control-opencage-geocoding-alternatives-minimized'
@@ -231,15 +231,26 @@ export class OpenCageGeocodingControl extends Control {
    */
   _createAlt(result, index) {
     const li = document.createElement('li');
-    li.innerHTML =
-      '<a href="#" data-result-index="' +
-      index +
-      '">' +
-      (this.options.showResultIcons && result.icon
-        ? '<img src="' + result.icon + '"/>'
-        : '') +
-      result.name +
-      '</a>';
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.resultIndex = index;
+
+    if (this.options.showResultIcons && result.icon) {
+      try {
+        const u = new URL(result.icon, window.location.href);
+        if (u.protocol === 'http:' || u.protocol === 'https:') {
+          const img = document.createElement('img');
+          img.src = u.href;
+          img.alt = '';
+          a.appendChild(img);
+        }
+      } catch {
+        // ignore invalid URL
+      }
+    }
+
+    a.appendChild(document.createTextNode(result.name));
+    li.appendChild(a);
 
     // L.DomEvent.addListener(
     li.addEventListener('click', () => {
