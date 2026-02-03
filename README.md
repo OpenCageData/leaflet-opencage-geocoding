@@ -22,6 +22,10 @@ Starting with version 2.1, Bower is no longer supported. The package is now publ
 
 ```bash
 npm install leaflet-opencage-geocoding
+# or
+pnpm add leaflet-opencage-geocoding
+# or
+yarn add leaflet-opencage-geocoding
 ```
 
 The package includes both UMD and ESM builds, which you can import based on your project setup:
