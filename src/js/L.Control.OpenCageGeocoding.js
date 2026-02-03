@@ -51,7 +51,7 @@ export class OpenCageGeocodingControl extends L.Control {
 
     this._errorElement = document.createElement('div');
     this._errorElement.className = className + '-form-no-error';
-    this._errorElement.innerHTML = this.options.errorMessage;
+    this._errorElement.textContent = this.options.errorMessage;
 
     this._alts = L.DomUtil.create(
       'ul',
@@ -103,7 +103,7 @@ export class OpenCageGeocodingControl extends L.Control {
     if (results.length === 1) {
       this._geocodeResultSelected(results[0]);
     } else if (results.length > 0) {
-      this._alts.innerHTML = '';
+      this._alts.innerText = '';
       this._results = results;
       L.DomUtil.removeClass(
         this._alts,
@@ -136,8 +136,12 @@ export class OpenCageGeocodingControl extends L.Control {
       this._map.removeLayer(this._geocodeMarker);
     }
 
+    // .bindPopup treats the input as HTML
+    const popupEl = document.createElement('div');
+    popupEl.textContent = result.name;
+
     this._geocodeMarker = new L.Marker(result.center)
-      .bindPopup(result.name)
+      .bindPopup(popupEl)
       .addTo(this._map)
       .openPopup();
 
@@ -246,15 +250,26 @@ export class OpenCageGeocodingControl extends L.Control {
    */
   _createAlt(result, index) {
     const li = document.createElement('li');
-    li.innerHTML =
-      '<a href="#" data-result-index="' +
-      index +
-      '">' +
-      (this.options.showResultIcons && result.icon
-        ? '<img src="' + result.icon + '"/>'
-        : '') +
-      result.name +
-      '</a>';
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.resultIndex = index;
+
+    if (this.options.showResultIcons && result.icon) {
+      try {
+        const u = new URL(result.icon, window.location.href);
+        if (u.protocol === 'http:' || u.protocol === 'https:') {
+          const img = document.createElement('img');
+          img.src = u.href;
+          img.alt = '';
+          a.appendChild(img);
+        }
+      } catch {
+        // ignore invalid URL
+      }
+    }
+
+    a.appendChild(document.createTextNode(result.name));
+    li.appendChild(a);
 
     L.DomEvent.addListener(
       li,
