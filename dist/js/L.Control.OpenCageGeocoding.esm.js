@@ -1,6 +1,6 @@
 /**
- * OpenCage Data Geocoding Control v2.1.0 - 2025-10-14
- * Copyright (c) 2025, OpenCage GmbH 
+ * OpenCage Data Geocoding Control v2.1.0 - 2026-02-03
+ * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
  * 
@@ -191,7 +191,7 @@ class OpenCageGeocodingControl extends L.Control {
     L.DomEvent.addListener(input, "keydown", this._keydown, this);
     this._errorElement = document.createElement("div");
     this._errorElement.className = className + "-form-no-error";
-    this._errorElement.innerHTML = this.options.errorMessage;
+    this._errorElement.textContent = this.options.errorMessage;
     this._alts = L.DomUtil.create(
       "ul",
       className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized"
@@ -234,7 +234,7 @@ class OpenCageGeocodingControl extends L.Control {
     if (results.length === 1) {
       this._geocodeResultSelected(results[0]);
     } else if (results.length > 0) {
-      this._alts.innerHTML = "";
+      this._alts.innerText = "";
       this._results = results;
       L.DomUtil.removeClass(
         this._alts,
@@ -262,7 +262,9 @@ class OpenCageGeocodingControl extends L.Control {
     if (this._geocodeMarker) {
       this._map.removeLayer(this._geocodeMarker);
     }
-    this._geocodeMarker = new L.Marker(result.center).bindPopup(result.name).addTo(this._map).openPopup();
+    const popupEl = document.createElement("div");
+    popupEl.textContent = result.name;
+    this._geocodeMarker = new L.Marker(result.center).bindPopup(popupEl).addTo(this._map).openPopup();
     return this;
   }
   /**
@@ -352,7 +354,23 @@ class OpenCageGeocodingControl extends L.Control {
    */
   _createAlt(result, index) {
     const li = document.createElement("li");
-    li.innerHTML = '<a href="#" data-result-index="' + index + '">' + (this.options.showResultIcons && result.icon ? '<img src="' + result.icon + '"/>' : "") + result.name + "</a>";
+    const a = document.createElement("a");
+    a.href = "#";
+    a.dataset.resultIndex = index;
+    if (this.options.showResultIcons && result.icon) {
+      try {
+        const u = new URL(result.icon, window.location.href);
+        if (u.protocol === "http:" || u.protocol === "https:") {
+          const img = document.createElement("img");
+          img.src = u.href;
+          img.alt = "";
+          a.appendChild(img);
+        }
+      } catch {
+      }
+    }
+    a.appendChild(document.createTextNode(result.name));
+    li.appendChild(a);
     L.DomEvent.addListener(
       li,
       "click",
