@@ -1,6 +1,6 @@
 /**
- * OpenCage Data Geocoding Control v3.0.0-alpha.2 - 2025-10-14
- * Copyright (c) 2025, OpenCage GmbH 
+ * OpenCage Data Geocoding Control v3.0.0-alpha.2 - 2026-02-03
+ * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
  * 
@@ -169,7 +169,7 @@
       input.addEventListener("keydown", this._keydown.bind(this));
       this._errorElement = document.createElement("div");
       this._errorElement.className = className + "-form-no-error";
-      this._errorElement.innerHTML = this.options.errorMessage;
+      this._errorElement.innerText = this.options.errorMessage;
       this._alts = L$1.DomUtil.create(
         "ul",
         className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized"
@@ -206,7 +206,7 @@
       if (results.length === 1) {
         this._geocodeResultSelected(results[0]);
       } else if (results.length > 0) {
-        this._alts.innerHTML = "";
+        this._alts.innerText = "";
         this._results = results;
         this._alts.classList.remove(
           "leaflet-control-opencage-geocoding-alternatives-minimized"
@@ -314,7 +314,23 @@
      */
     _createAlt(result, index) {
       const li = document.createElement("li");
-      li.innerHTML = '<a href="#" data-result-index="' + index + '">' + (this.options.showResultIcons && result.icon ? '<img src="' + result.icon + '"/>' : "") + result.name + "</a>";
+      const a = document.createElement("a");
+      a.href = "#";
+      a.dataset.resultIndex = index;
+      if (this.options.showResultIcons && result.icon) {
+        try {
+          const u = new URL(result.icon, window.location.href);
+          if (u.protocol === "http:" || u.protocol === "https:") {
+            const img = document.createElement("img");
+            img.src = u.href;
+            img.alt = "";
+            a.appendChild(img);
+          }
+        } catch {
+        }
+      }
+      a.appendChild(document.createTextNode(result.name));
+      li.appendChild(a);
       li.addEventListener("click", () => {
         this._geocodeResultSelected(result);
       });

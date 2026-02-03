@@ -56,7 +56,7 @@ export class OpenCageGeocodingControl extends Control {
     this._alts = L.DomUtil.create(
       'ul',
       className +
-        '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized'
+      '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized'
     );
 
     form.appendChild(input);

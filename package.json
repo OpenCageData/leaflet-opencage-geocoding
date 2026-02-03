@@ -49,7 +49,7 @@
   ],
   "dependencies": {
     "leaflet": "2.0.0-alpha.1",
-    "opencage-api-client": "^2.0.1"
+    "opencage-api-client": "2.1.0"
   },
   "peerDependencies": {
     "leaflet": "^2",
