@@ -109,4 +109,59 @@ describe('OpenCageGeocoder', () => {
       );
     });
   });
+
+  describe('_makeRequest', () => {
+    it('should fetch the correct URL and call callback with data', async () => {
+      const mockData = { results: [] };
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(mockData),
+      });
+
+      await new Promise((resolve) => {
+        geocoder._makeRequest(
+          'https://api.opencagedata.com/geocode/v1/json/',
+          { key: 'test-api-key', q: 'London' },
+          (data) => {
+            expect(data).toEqual(mockData);
+            resolve();
+          }
+        );
+      });
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('https://api.opencagedata.com/geocode/v1/json/?')
+      );
+    });
+
+    it('should call callback with empty results on non-ok response', async () => {
+      global.fetch.mockResolvedValue({ ok: false });
+
+      await new Promise((resolve) => {
+        geocoder._makeRequest(
+          'https://api.opencagedata.com/geocode/v1/json/',
+          { key: 'test-api-key', q: 'London' },
+          (data) => {
+            expect(data).toEqual({ results: [] });
+            resolve();
+          }
+        );
+      });
+    });
+
+    it('should call callback with empty results on network error', async () => {
+      global.fetch.mockRejectedValue(new Error('Network error'));
+
+      await new Promise((resolve) => {
+        geocoder._makeRequest(
+          'https://api.opencagedata.com/geocode/v1/json/',
+          { key: 'test-api-key', q: 'London' },
+          (data) => {
+            expect(data).toEqual({ results: [] });
+            resolve();
+          }
+        );
+      });
+    });
+  });
 });
