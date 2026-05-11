@@ -86,10 +86,11 @@ export default defineConfig(({ mode, command }) => {
           },
           exports: 'named',
           assetFileNames: (assetInfo) => {
-            if (assetInfo.name.endsWith('.css')) {
+            const name = assetInfo.names?.[0] ?? assetInfo.name ?? '';
+            if (name.endsWith('.css')) {
               return `css/OpenCageGeocoding.${isProduction ? 'min' : 'dev'}.css`;
             }
-            if (assetInfo.name.match(/\.(png|gif|jpg|jpeg|svg)$/)) {
+            if (name.match(/\.(png|gif|jpg|jpeg|svg)$/)) {
               return 'images/[name][extname]';
             }
             return 'assets/[name][extname]';
