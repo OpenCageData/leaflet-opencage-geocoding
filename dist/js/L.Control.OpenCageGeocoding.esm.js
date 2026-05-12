@@ -104,49 +104,11 @@ var OpenCageGeocoder = class {
 			result[key] = resultAttr;
 		}
 	}
-	/**
-	* Make JSONP request to the API
-	* @private
-	*/
 	_makeRequest(url, params, callback) {
-		return makeJsonpRequest(url, params, callback, this, "jsonp");
+		const queryString = new URLSearchParams(params).toString();
+		fetch(`${url}?${queryString}`).then((response) => response.ok ? response.json() : { results: [] }).then((data) => callback(data)).catch(() => callback({ results: [] }));
 	}
 };
-/**
-* Global callback counter for JSONP requests
-*/
-var callbackId = 0;
-/**
-* Make a JSONP request
-* @param {string} url - Base URL
-* @param {Object} params - Parameters object
-* @param {Function} callback - Callback function
-* @param {Object} context - Context object
-* @param {string} jsonpParam - JSONP parameter name
-*/
-function makeJsonpRequest(url, params, callback, context, jsonpParam) {
-	const callbackName = "_ocd_geocoder_" + callbackId++;
-	params[jsonpParam || "callback"] = callbackName;
-	window[callbackName] = function(data) {
-		callback.call(context, data);
-		delete window[callbackName];
-		const script = document.getElementById(callbackName);
-		if (script && script.parentNode) script.parentNode.removeChild(script);
-	};
-	const script = document.createElement("script");
-	script.type = "text/javascript";
-	script.src = url + L.Util.getParamString(params);
-	script.id = callbackName;
-	script.addEventListener("error", () => {
-		callback.call(context, { results: [] });
-		delete window[callbackName];
-	});
-	script.addEventListener("abort", () => {
-		callback.call(context, { results: [] });
-		delete window[callbackName];
-	});
-	document.getElementsByTagName("head")[0].appendChild(script);
-}
 //#endregion
 //#region src/js/L.Control.OpenCageGeocoding.js
 /**

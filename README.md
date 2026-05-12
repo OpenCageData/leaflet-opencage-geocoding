@@ -16,6 +16,8 @@ For Leaflet version 2: check the [release branch v3.x](https://github.com/OpenCa
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
 
+Starting with version 2.4, this plugin uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). All modern browsers support it natively. If you need to support older browsers (IE11 and below), add a polyfill such as [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch):
+
 ## Installation
 
 ### Via npm
