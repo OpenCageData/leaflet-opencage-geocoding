@@ -130,7 +130,9 @@ describe('OpenCageGeocoder', () => {
       });
 
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('https://api.opencagedata.com/geocode/v1/json/?')
+        expect.stringContaining(
+          'https://api.opencagedata.com/geocode/v1/json/?'
+        )
       );
     });
 
