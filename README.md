@@ -20,21 +20,21 @@ Starting with version 3, the supported Leaflet version is 2.0 and superior; for 
 ### Via npm, yarn or pnpm
 
 ```bash
-npm install leaflet-opencage-geocoding
+npm install @opencage/leaflet-opencage-geocoding
 # or
-yarn add leaflet-opencage-geocoding
+yarn add @opencage/leaflet-opencage-geocoding
 # or
-pnpm add leaflet-opencage-geocoding
+pnpm add @opencage/leaflet-opencage-geocoding
 ```
 
 The package includes both UMD and ESM builds, which you can import based on your project setup:
 
 ```javascript
 // ESM
-import 'leaflet-opencage-geocoding';
+import '@opencage/leaflet-opencage-geocoding';
 
 // CommonJS
-require('leaflet-opencage-geocoding');
+require('@opencage/leaflet-opencage-geocoding');
 ```
 
 ### Via CDN (for vanilla JS/HTML projects)
