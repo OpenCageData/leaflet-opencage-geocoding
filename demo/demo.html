@@ -131,6 +131,14 @@
     console.log('📊 Control instance:', control);
     console.log('🔧 Available in global scope as L.Control.OpenCageGeocoding');
 
+    // Leaflet treats string popup content as HTML.
+    // This mirrors markGeocode() in src/js/L.Control.OpenCageGeocoding.js
+    function popupContent(text) {
+      const el = document.createElement('div');
+      el.textContent = text;
+      return el;
+    }
+
     map.on('click', function (e) {
       const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
       geocoder.geocode(query, function (results) {
@@ -138,9 +146,9 @@
         if (r) {
           console.log('📌 Reverse geocoding result:', r);
           if (marker) {
-            marker.setLatLng(r.center).setPopupContent(r.name).openPopup();
+            marker.setLatLng(r.center).setPopupContent(popupContent(r.name)).openPopup();
           } else {
-            marker = L.marker(r.center).bindPopup(r.name).addTo(map).openPopup();
+            marker = L.marker(r.center).bindPopup(popupContent(r.name)).addTo(map).openPopup();
           }
         }
       })
