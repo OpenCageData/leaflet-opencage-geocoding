@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.4.1 - 2026-06-08
+ * OpenCage Data Geocoding Control v2.4.2 - 2026-08-05
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -32,7 +32,7 @@
 		}
 		return to;
 	};
-	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", {
+	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
 		value: mod,
 		enumerable: true
 	}) : target, mod));
@@ -163,10 +163,9 @@
 			if (!this.options.geocoder) this.options.geocoder = new OpenCageGeocoder(this.options);
 		}
 		onAdd(map) {
-			const className = "leaflet-control-opencage-geocoding";
-			const container = leaflet.default.DomUtil.create("div", className);
+			const container = leaflet.default.DomUtil.create("div", "leaflet-control-opencage-geocoding");
 			const icon = leaflet.default.DomUtil.create("div", "leaflet-control-opencage-geocoding-icon", container);
-			const form = leaflet.default.DomUtil.create("form", className + "-form", container);
+			const form = leaflet.default.DomUtil.create("form", "leaflet-control-opencage-geocoding-form", container);
 			this._form = form;
 			this._map = map;
 			this._container = container;
@@ -176,9 +175,9 @@
 			input.placeholder = this.options.placeholder;
 			leaflet.default.DomEvent.addListener(input, "keydown", this._keydown, this);
 			this._errorElement = document.createElement("div");
-			this._errorElement.className = className + "-form-no-error";
+			this._errorElement.className = "leaflet-control-opencage-geocoding-form-no-error";
 			this._errorElement.textContent = this.options.errorMessage;
-			this._alts = leaflet.default.DomUtil.create("ul", className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
+			this._alts = leaflet.default.DomUtil.create("ul", "leaflet-control-opencage-geocoding-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
 			form.appendChild(input);
 			form.appendChild(this._errorElement);
 			container.appendChild(this._alts);
@@ -314,14 +313,12 @@
 					select(1);
 					leaflet.default.DomEvent.preventDefault(e);
 					break;
-				case 13:
-					if (this._selection) {
-						const index = parseInt(this._selection.firstChild.getAttribute("data-result-index"), 10);
-						this._geocodeResultSelected(this._results[index]);
-						this._clearResults();
-						leaflet.default.DomEvent.preventDefault(e);
-					}
-					break;
+				case 13: if (this._selection) {
+					const index = parseInt(this._selection.firstChild.getAttribute("data-result-index"), 10);
+					this._geocodeResultSelected(this._results[index]);
+					this._clearResults();
+					leaflet.default.DomEvent.preventDefault(e);
+				}
 			}
 			return true;
 		}
