@@ -48,7 +48,10 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       emptyOutDir: false, // Don't empty on each build since we're doing multiple builds
       lib: {
-        entry: resolve(__dirname, 'src/js/L.Control.OpenCageGeocoding.js'),
+        entry: resolve(
+          import.meta.dirname,
+          'src/js/L.Control.OpenCageGeocoding.js'
+        ),
         name: 'leaflet-control-opencage-geocoding',
         formats: isProduction ? ['umd'] : ['umd', 'es'],
         fileName: (format) => {
