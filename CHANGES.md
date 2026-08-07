@@ -3,6 +3,7 @@
     * Code cleanup: replace deprecated `__dirname` in the vite config
     * Code cleanup: the Github Action workflow now only requests read permissions
     * Node v18 is no longer supported
+    * created a CHANGED.md file and backfilled
     * NPM package updates: vite, js-yaml, undici, postcss, dev dependencies
 
 * version 2.4.1 - 2026-06-08
