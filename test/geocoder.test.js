@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import L from 'leaflet';
 import { OpenCageGeocoder } from '../src/js/geocoder.js';
 
 describe('OpenCageGeocoder', () => {
@@ -107,6 +108,112 @@ describe('OpenCageGeocoder', () => {
         }),
         expect.any(Function)
       );
+    });
+  });
+
+  describe('reverse', () => {
+    let mockMakeRequest;
+
+    beforeEach(() => {
+      mockMakeRequest = vi.spyOn(geocoder, '_makeRequest');
+      mockMakeRequest.mockImplementation(() => {});
+    });
+
+    const paramsOfLastRequest = () => mockMakeRequest.mock.calls.at(-1)[1];
+
+    it.each([
+      ['an L.LatLng', L.latLng(51.5, -0.12)],
+      ['a {lat, lng} object', { lat: 51.5, lng: -0.12 }],
+      ['a {lat, lon} object', { lat: 51.5, lon: -0.12 }],
+      ['a [lat, lng] array', [51.5, -0.12]],
+      ['numeric strings', { lat: '51.5', lng: '-0.12' }],
+    ])('should send a "lat,lng" query for %s', (_label, location) => {
+      geocoder.reverse(location, 10, mockCallback, mockContext);
+
+      expect(paramsOfLastRequest()).toMatchObject({
+        q: '51.5,-0.12',
+        key: 'test-api-key',
+      });
+    });
+
+    it('should not send proximity or geocodingQueryParams', () => {
+      geocoder.options.geocodingQueryParams = { countrycode: 'gb' };
+
+      geocoder.reverse(
+        { lat: 51.5, lng: -0.12 },
+        10,
+        mockCallback,
+        mockContext
+      );
+
+      const params = paramsOfLastRequest();
+      expect(params).not.toHaveProperty('proximity');
+      expect(params).not.toHaveProperty('countrycode');
+      expect(params).not.toHaveProperty('limit');
+    });
+
+    it('should apply reverseQueryParams', () => {
+      geocoder.options.reverseQueryParams = {
+        language: 'de',
+        no_annotations: 1,
+      };
+
+      geocoder.reverse(
+        { lat: 51.5, lng: -0.12 },
+        10,
+        mockCallback,
+        mockContext
+      );
+
+      expect(paramsOfLastRequest()).toMatchObject({
+        q: '51.5,-0.12',
+        language: 'de',
+        no_annotations: 1,
+      });
+    });
+
+    it('should deliver processed results to the callback in context', () => {
+      mockMakeRequest.mockImplementation((url, params, cb) =>
+        cb({
+          results: [
+            { formatted: 'Test Location', geometry: { lat: 51.5, lng: -0.1 } },
+          ],
+        })
+      );
+
+      geocoder.reverse(
+        { lat: 51.5, lng: -0.12 },
+        10,
+        mockCallback,
+        mockContext
+      );
+
+      expect(mockCallback).toHaveBeenCalledTimes(1);
+      const [results] = mockCallback.mock.calls[0];
+      expect(results).toHaveLength(1);
+      expect(results[0].name).toBe('Test Location');
+      expect(mockCallback.mock.contexts[0]).toBe(mockContext);
+    });
+
+    it.each([
+      ['a string', '51.5,-0.12'],
+      ['an empty object', {}],
+      ['null', null],
+      ['undefined', undefined],
+    ])('should throw a TypeError for %s', (_label, location) => {
+      expect(() =>
+        geocoder.reverse(location, 10, mockCallback, mockContext)
+      ).toThrow(TypeError);
+      expect(mockMakeRequest).not.toHaveBeenCalled();
+    });
+
+    it('should never stringify the location into the query', () => {
+      geocoder.reverse(L.latLng(51.5, -0.12), 10, mockCallback, mockContext);
+
+      const queryString = new URLSearchParams(paramsOfLastRequest()).toString();
+      expect(queryString).toContain('q=51.5%2C-0.12');
+      expect(queryString).not.toContain('LatLng');
+      expect(queryString).not.toContain('object+Object');
     });
   });
 

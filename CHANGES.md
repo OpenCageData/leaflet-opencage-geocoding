@@ -1,8 +1,13 @@
+* version 2.5.0 - 2026-08-27
+    * Fix: `reverse()` now builds its own `q=lat,lng` query instead of stringifying the location object
+    * Fix: `reverseQueryParams` was declared but never used. Now used, added tests
+
 * version 2.4.2 - unreleased
+    * Demo page: the map click handler uses `reverse()` rather than hand-building a coordinate string
     * Fix: demo page escapes HTML before inserting it into the DOM
     * Code cleanup: replace deprecated `__dirname` in the vite config
     * Code cleanup: the Github Action workflow now only requests read permissions
-    * Node v18 is no longer supported
+    * Build process: Node v18 is no longer supported
     * created a CHANGED.md file and backfilled
     * NPM package updates: vite, js-yaml, undici, postcss, dev dependencies
 

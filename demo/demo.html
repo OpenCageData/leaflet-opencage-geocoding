@@ -140,8 +140,8 @@
     }
 
     map.on('click', function (e) {
-      const query = e.latlng.lat.toString() + ',' + e.latlng.lng.toString();
-      geocoder.geocode(query, function (results) {
+      // scale is ignored by the OpenCage geocoder, but IGeocoder requires it
+      geocoder.reverse(e.latlng, map.getZoom(), function (results) {
         const r = results[0];
         if (r) {
           console.log('📌 Reverse geocoding result:', r);
