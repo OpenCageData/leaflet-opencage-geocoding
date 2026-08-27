@@ -1,6 +1,8 @@
 * version 2.5.0 - 2026-08-27
     * Fix: `reverse()` now builds its own `q=lat,lng` query instead of stringifying the location object
     * Fix: `reverseQueryParams` was declared but never used. Now used, added tests
+    * Fix: a result handler that throws is no longer called a second time with an empty result set
+    * Fix: exceptions from result handlers are no longer swallowed. They are now re-thrown (asynchronously)
 
 * version 2.4.2 - unreleased
     * Demo page: the map click handler uses `reverse()` rather than hand-building a coordinate string
