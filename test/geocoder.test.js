@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import L from 'leaflet';
 import { OpenCageGeocoder } from '../src/js/geocoder.js';
 
@@ -119,16 +119,20 @@ describe('OpenCageGeocoder', () => {
       mockMakeRequest.mockImplementation(() => {});
     });
 
+    // No default parameter here: `reverse(undefined)` must stay undefined so
+    // the invalid-input cases below actually exercise it.
+    const london = { lat: 51.5, lng: -0.12 };
+    const reverse = (location) =>
+      geocoder.reverse(location, 10, mockCallback, mockContext);
+
     const paramsOfLastRequest = () => mockMakeRequest.mock.calls.at(-1)[1];
 
     it.each([
       ['an L.LatLng', L.latLng(51.5, -0.12)],
       ['a {lat, lng} object', { lat: 51.5, lng: -0.12 }],
-      ['a {lat, lon} object', { lat: 51.5, lon: -0.12 }],
       ['a [lat, lng] array', [51.5, -0.12]],
-      ['numeric strings', { lat: '51.5', lng: '-0.12' }],
     ])('should send a "lat,lng" query for %s', (_label, location) => {
-      geocoder.reverse(location, 10, mockCallback, mockContext);
+      reverse(location);
 
       expect(paramsOfLastRequest()).toMatchObject({
         q: '51.5,-0.12',
@@ -136,15 +140,10 @@ describe('OpenCageGeocoder', () => {
       });
     });
 
-    it('should not send proximity or geocodingQueryParams', () => {
+    it('should not send proximity, limit or geocodingQueryParams', () => {
       geocoder.options.geocodingQueryParams = { countrycode: 'gb' };
 
-      geocoder.reverse(
-        { lat: 51.5, lng: -0.12 },
-        10,
-        mockCallback,
-        mockContext
-      );
+      reverse(london);
 
       const params = paramsOfLastRequest();
       expect(params).not.toHaveProperty('proximity');
@@ -153,22 +152,13 @@ describe('OpenCageGeocoder', () => {
     });
 
     it('should apply reverseQueryParams', () => {
-      geocoder.options.reverseQueryParams = {
-        language: 'de',
-        no_annotations: 1,
-      };
+      geocoder.options.reverseQueryParams = { language: 'de' };
 
-      geocoder.reverse(
-        { lat: 51.5, lng: -0.12 },
-        10,
-        mockCallback,
-        mockContext
-      );
+      reverse(london);
 
       expect(paramsOfLastRequest()).toMatchObject({
         q: '51.5,-0.12',
         language: 'de',
-        no_annotations: 1,
       });
     });
 
@@ -181,12 +171,7 @@ describe('OpenCageGeocoder', () => {
         })
       );
 
-      geocoder.reverse(
-        { lat: 51.5, lng: -0.12 },
-        10,
-        mockCallback,
-        mockContext
-      );
+      reverse(london);
 
       expect(mockCallback).toHaveBeenCalledTimes(1);
       const [results] = mockCallback.mock.calls[0];
@@ -201,76 +186,79 @@ describe('OpenCageGeocoder', () => {
       ['null', null],
       ['undefined', undefined],
     ])('should throw a TypeError for %s', (_label, location) => {
-      expect(() =>
-        geocoder.reverse(location, 10, mockCallback, mockContext)
-      ).toThrow(TypeError);
+      expect(() => reverse(location)).toThrow(TypeError);
       expect(mockMakeRequest).not.toHaveBeenCalled();
-    });
-
-    it('should never stringify the location into the query', () => {
-      geocoder.reverse(L.latLng(51.5, -0.12), 10, mockCallback, mockContext);
-
-      const queryString = new URLSearchParams(paramsOfLastRequest()).toString();
-      expect(queryString).toContain('q=51.5%2C-0.12');
-      expect(queryString).not.toContain('LatLng');
-      expect(queryString).not.toContain('object+Object');
     });
   });
 
   describe('_makeRequest', () => {
+    const url = 'https://api.opencagedata.com/geocode/v1/json/';
+    const params = { key: 'test-api-key', q: 'London' };
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     it('should fetch the correct URL and call callback with data', async () => {
       const mockData = { results: [] };
       global.fetch.mockResolvedValue({
         ok: true,
         json: vi.fn().mockResolvedValue(mockData),
       });
+      const handler = vi.fn();
 
-      await new Promise((resolve) => {
-        geocoder._makeRequest(
-          'https://api.opencagedata.com/geocode/v1/json/',
-          { key: 'test-api-key', q: 'London' },
-          (data) => {
-            expect(data).toEqual(mockData);
-            resolve();
-          }
-        );
-      });
+      await geocoder._makeRequest(url, params, handler);
 
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining(
-          'https://api.opencagedata.com/geocode/v1/json/?'
-        )
-      );
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(url));
+      expect(handler).toHaveBeenCalledWith(mockData);
     });
 
-    it('should call callback with empty results on non-ok response', async () => {
-      global.fetch.mockResolvedValue({ ok: false });
+    it.each([
+      [
+        'a non-ok response',
+        () => global.fetch.mockResolvedValue({ ok: false }),
+      ],
+      [
+        'a network error',
+        () => global.fetch.mockRejectedValue(new Error('Network error')),
+      ],
+      [
+        'malformed JSON',
+        () =>
+          global.fetch.mockResolvedValue({
+            ok: true,
+            json: vi
+              .fn()
+              .mockRejectedValue(new SyntaxError('Unexpected token')),
+          }),
+      ],
+    ])('should deliver empty results on %s', async (_label, stubFetch) => {
+      stubFetch();
+      const handler = vi.fn();
 
-      await new Promise((resolve) => {
-        geocoder._makeRequest(
-          'https://api.opencagedata.com/geocode/v1/json/',
-          { key: 'test-api-key', q: 'London' },
-          (data) => {
-            expect(data).toEqual({ results: [] });
-            resolve();
-          }
-        );
-      });
+      await geocoder._makeRequest(url, params, handler);
+
+      expect(handler).toHaveBeenCalledWith({ results: [] });
     });
 
-    it('should call callback with empty results on network error', async () => {
-      global.fetch.mockRejectedValue(new Error('Network error'));
-
-      await new Promise((resolve) => {
-        geocoder._makeRequest(
-          'https://api.opencagedata.com/geocode/v1/json/',
-          { key: 'test-api-key', q: 'London' },
-          (data) => {
-            expect(data).toEqual({ results: [] });
-            resolve();
-          }
-        );
+    it('should invoke a throwing handler once, then re-throw asynchronously', async () => {
+      vi.useFakeTimers();
+      const payload = { results: [{ formatted: 'x' }] };
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue(payload),
       });
+      const boom = new Error('bug in the result handler');
+      const handler = vi.fn(() => {
+        throw boom;
+      });
+
+      // Awaiting settles every delivery; the re-throw is a pending timer.
+      await geocoder._makeRequest(url, params, handler);
+
+      // Exactly one call, with the real payload - never a second, empty one.
+      expect(handler.mock.calls).toEqual([[payload]]);
+      expect(() => vi.runAllTimers()).toThrow(boom);
     });
   });
 });

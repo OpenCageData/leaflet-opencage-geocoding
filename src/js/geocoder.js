@@ -153,12 +153,37 @@ export class OpenCageGeocoder {
     }
   }
 
+  /**
+   * Send the request and hand the payload to the callback exactly once
+   *
+   * Nothing may be chained after the final `.then()`: a rejection handler
+   * downstream of the callback also catches exceptions thrown *by* the
+   * callback, and would then re-invoke it with empty results. That is why the
+   * `.catch()` sits above the delivery step rather than at the end.
+   *
+   * Returns the request promise, which never rejects. Callers may ignore it.
+   *
+   * @private
+   */
   _makeRequest(url, params, callback) {
     const queryString = new URLSearchParams(params).toString();
-    fetch(`${url}?${queryString}`)
-      .then((response) => (response.ok ? response.json() : { results: [] }))
-      .then((data) => callback(data))
-      .catch(() => callback({ results: [] }));
+    const noResults = { results: [] };
+
+    return fetch(`${url}?${queryString}`)
+      .then((response) => (response.ok ? response.json() : noResults))
+      .catch(() => noResults)
+      .then((data) => {
+        try {
+          callback(data);
+        } catch (error) {
+          // Re-throw asynchronously so a bug in a result handler reaches
+          // window.onerror like any other event-handler exception, instead of
+          // being swallowed here or surfacing as an unhandled rejection.
+          setTimeout(() => {
+            throw error;
+          });
+        }
+      });
   }
 }
 
