@@ -125,12 +125,41 @@ var options = {
         geohash: "annotations.geohash",
         what3words: "annotations.what3words",
         addressComponents: "components"
-    } //if additional attributes from OpenCage search API should be added to the result
+    }, //if additional attributes from OpenCage search API should be added to the result
+    geocodingQueryParams: {}, // extra query parameters sent with forward geocoding requests
+    reverseQueryParams: {} // extra query parameters sent with reverse geocoding requests
 };
 
 var control = L.Control.openCageGeocoding(options).addTo(map);
 
 ```
+
+Any [OpenCage API parameter](https://opencagedata.com/api#forward-opt) can be
+passed via `geocodingQueryParams` and `reverseQueryParams`, for example
+`{ language: 'de', countrycode: 'de' }`.
+
+## Reverse geocoding
+
+The geocoder can also be used directly, without the control, to turn coordinates
+into a place name or addresss:
+
+```javascript
+var geocoder = L.Control.OpenCageGeocoding.geocoder({
+  key: 'your-api-key-here',
+});
+
+map.on('click', function (e) {
+  // the second argument (scale) is ignored
+  geocoder.reverse(e.latlng, map.getZoom(), function (results) {
+    if (results[0]) {
+      L.marker(results[0].center).addTo(map);
+    }
+  });
+});
+```
+
+`reverse()` accepts anything `L.latLng()` does: `L.LatLng` object, `[lat, lng]`
+array or `{lat, lng}`. It throws a `TypeError` for anything else.
 
 ## Contributing
 

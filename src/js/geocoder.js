@@ -32,21 +32,49 @@ export class OpenCageGeocoder {
       ...this.options.geocodingQueryParams,
     };
 
-    this._makeRequest(this.options.serviceUrl, params, (data) => {
-      const results = this._processResults(data);
-      callback.call(context, results);
-    });
+    this._request(params, callback, context);
   }
 
   /**
    * Reverse geocode a location
-   * @param {Object} location - Location object with lat/lng
-   * @param {number} scale - Scale parameter (unused in current implementation)
+   *
+   * Use `reverseQueryParams` to add parameters here. `limit` is omitted
+   * because the API returns at most one reverse geocoding result.
+   *
+   * @param {L.LatLng|Array|Object} location - Anything L.latLng() accepts:
+   *   an L.LatLng, [lat, lng] or {lat, lng}
+   * @param {number} scale - Ignored
    * @param {Function} callback - Callback function to handle results
    * @param {Object} context - Context object
    */
   reverse(location, scale, callback, context) {
-    this.geocode(location, callback, context);
+    const latLng = L.latLng(location);
+
+    if (!latLng) {
+      throw new TypeError(
+        `Invalid location for reverse geocoding: ${JSON.stringify(location)}. ` +
+          'Expected an L.LatLng, [lat, lng] or {lat, lng}'
+      );
+    }
+
+    const params = {
+      q: `${latLng.lat},${latLng.lng}`,
+      key: this.options.key,
+      ...this.options.reverseQueryParams,
+    };
+
+    this._request(params, callback, context);
+  }
+
+  /**
+   * Send a request and deliver the processed results to the callback
+   * @private
+   */
+  _request(params, callback, context) {
+    this._makeRequest(this.options.serviceUrl, params, (data) => {
+      const results = this._processResults(data);
+      callback.call(context, results);
+    });
   }
 
   /**
