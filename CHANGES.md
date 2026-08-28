@@ -1,4 +1,4 @@
-* version 2.5.0 - 2026-08-27
+* version 2.5.0 - 2026-08-28
     * Fix: `reverse()` now builds its own `q=lat,lng` query instead of stringifying the location object
     * Fix: `reverseQueryParams` was declared but never used. Now used, added tests
     * Fix: a result handler that throws is no longer called a second time with an empty result set
