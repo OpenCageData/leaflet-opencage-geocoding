@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v3.0.0-alpha.3 - 2026-06-08
+ * OpenCage Data Geocoding Control v3.0.0-alpha.3 - 2026-08-28
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -36,13 +36,31 @@
 		}
 		return to;
 	};
-	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", {
+	var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule || !__hasOwnProp.call(mod, "default") ? __defProp(target, "default", {
 		value: mod,
 		enumerable: true
 	}) : target, mod));
 	//#endregion
 	leaflet = __toESM(leaflet, 1);
 	//#region src/js/geocoder.js
+	/**
+	* Coerce the shapes Leaflet 1's `L.latLng()` accepted into a LatLng
+	*
+	* Leaflet 2 dropped the lowercase factory functions, and the `LatLng`
+	* constructor throws on bad input rather than returning null, so the shape is
+	* checked here first. Returns null for anything unusable.
+	*
+	* @private
+	*/
+	function toLatLng(location) {
+		if (location instanceof leaflet.LatLng) return location;
+		if (Array.isArray(location) && location.length >= 2) return new leaflet.LatLng(location[0], location[1]);
+		if (location && typeof location === "object" && "lat" in location) {
+			const lng = "lng" in location ? location.lng : location.lon;
+			if (lng !== void 0) return new leaflet.LatLng(location.lat, lng);
+		}
+		return null;
+	}
 	/**
 	* Geocoder class for OpenCage API interactions
 	*/
@@ -70,20 +88,38 @@
 				...proximity,
 				...this.options.geocodingQueryParams
 			};
-			this._makeRequest(params, (data) => {
-				const results = this._processResults(data);
-				callback.call(context, results);
-			});
+			this._request(params, callback, context);
 		}
 		/**
 		* Reverse geocode a location
-		* @param {Object} location - Location object with lat/lng
-		* @param {number} scale - Scale parameter (unused in current implementation)
+		*
+		* Use `reverseQueryParams` to add parameters here. `limit` is omitted
+		* because the API returns at most one reverse geocoding result.
+		*
+		* @param {LatLng|Array|Object} location - A LatLng, [lat, lng] or {lat, lng}
+		* @param {number} scale - Ignored
 		* @param {Function} callback - Callback function to handle results
 		* @param {Object} context - Context object
 		*/
 		reverse(location, scale, callback, context) {
-			this.geocode(location, callback, context);
+			const latLng = toLatLng(location);
+			if (!latLng) throw new TypeError(`Invalid location for reverse geocoding: ${JSON.stringify(location)}. Expected a LatLng, [lat, lng] or {lat, lng}`);
+			const params = {
+				q: `${latLng.lat},${latLng.lng}`,
+				key: this.options.key,
+				...this.options.reverseQueryParams
+			};
+			this._request(params, callback, context);
+		}
+		/**
+		* Send a request and deliver the processed results to the callback
+		* @private
+		*/
+		_request(params, callback, context) {
+			this._makeRequest(params, (data) => {
+				const results = this._processResults(data);
+				callback.call(context, results);
+			});
 		}
 		/**
 		* Get proximity parameter from map center
@@ -136,12 +172,27 @@
 			}
 		}
 		/**
-		* Make JSONP request to the API
+		* Send the request and hand the payload to the callback exactly once
+		*
+		* Nothing may be chained after the final `.then()`: a rejection handler
+		* downstream of the callback also catches exceptions thrown *by* the
+		* callback, and would then re-invoke it with empty results. That is why the
+		* `.catch()` sits above the delivery step rather than at the end.
+		*
+		* Returns the request promise, which never rejects. Callers may ignore it.
+		*
 		* @private
 		*/
 		_makeRequest(params, callback) {
-			(0, opencage_api_client.geocode)(params).then((data) => {
-				callback(data);
+			const noResults = { results: [] };
+			return (0, opencage_api_client.geocode)(params).catch(() => noResults).then((data) => {
+				try {
+					callback(data);
+				} catch (error) {
+					setTimeout(() => {
+						throw error;
+					});
+				}
 			});
 		}
 	};
@@ -184,21 +235,22 @@
 			input.addEventListener("keydown", this._keydown.bind(this));
 			this._errorElement = document.createElement("div");
 			this._errorElement.className = className + "-form-no-error";
-			this._errorElement.innerText = this.options.errorMessage;
+			this._errorElement.textContent = this.options.errorMessage;
 			this._alts = leaflet.default.DomUtil.create("ul", className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
 			form.appendChild(input);
 			form.appendChild(this._errorElement);
 			container.appendChild(this._alts);
 			form.addEventListener("submit", this._geocode.bind(this));
-			if (this.options.collapsed) if (this.options.expand === "click") icon.addEventListener("click", (e) => {
-				if (e.button === 0 && e.detail !== 2) this._toggle();
-			});
-			else {
-				icon.addEventListener("mouseover", this._expand.bind(this));
-				icon.addEventListener("mouseout", this._collapse.bind(this));
-				this._map.on("movestart", this._collapse, this);
-			}
-			else this._expand();
+			if (this.options.collapsed) {
+				if (this.options.expand === "click") icon.addEventListener("click", (e) => {
+					if (e.button === 0 && e.detail !== 2) this._toggle();
+				});
+				else {
+					icon.addEventListener("mouseover", this._expand.bind(this));
+					icon.addEventListener("mouseout", this._collapse.bind(this));
+					this._map.on("movestart", this._collapse, this);
+				}
+			} else this._expand();
 			leaflet.default.DomEvent.disableClickPropagation(container);
 			return container;
 		}
@@ -222,7 +274,9 @@
 			if (result.bounds) this._map.fitBounds(result.bounds);
 			else this._map.panTo(result.center);
 			if (this._geocodeMarker) this._map.removeLayer(this._geocodeMarker);
-			this._geocodeMarker = new leaflet.Marker(result.center).bindPopup(result.name).addTo(this._map).openPopup();
+			const popupEl = document.createElement("div");
+			popupEl.textContent = result.name;
+			this._geocodeMarker = new leaflet.Marker(result.center).bindPopup(popupEl).addTo(this._map).openPopup();
 			return this;
 		}
 		/**
@@ -319,14 +373,12 @@
 					select(1);
 					leaflet.default.DomEvent.preventDefault(e);
 					break;
-				case 13:
-					if (this._selection) {
-						const index = parseInt(this._selection.firstChild.getAttribute("data-result-index"), 10);
-						this._geocodeResultSelected(this._results[index]);
-						this._clearResults();
-						leaflet.default.DomEvent.preventDefault(e);
-					}
-					break;
+				case 13: if (this._selection) {
+					const index = parseInt(this._selection.firstChild.getAttribute("data-result-index"), 10);
+					this._geocodeResultSelected(this._results[index]);
+					this._clearResults();
+					leaflet.default.DomEvent.preventDefault(e);
+				}
 			}
 			return true;
 		}
