@@ -20,6 +20,7 @@
     "geocoding",
     "search",
     "map",
+    "opencage",
     "opencagedata"
   ],
   "scripts": {
@@ -47,8 +48,8 @@
     "@eslint/js": "10.0",
     "@vitest/coverage-v8": "4.1",
     "@vitest/ui": "4.1",
-    "eslint": "10.8",
-    "globals": "17.9",
+    "eslint": "10.9",
+    "globals": "17.11",
     "jsdom": "29.1.1",
     "prettier": "3.9.6",
     "vite": "8.2",

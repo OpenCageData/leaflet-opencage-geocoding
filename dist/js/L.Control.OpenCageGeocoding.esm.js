@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.5.0 - 2026-08-27
+ * OpenCage Data Geocoding Control v2.5.0 - 2026-08-28
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -174,9 +174,10 @@ var OpenCageGeocodingControl = class extends L.Control {
 		if (!this.options.geocoder) this.options.geocoder = new OpenCageGeocoder(this.options);
 	}
 	onAdd(map) {
-		const container = L.DomUtil.create("div", "leaflet-control-opencage-geocoding");
+		const className = "leaflet-control-opencage-geocoding";
+		const container = L.DomUtil.create("div", className);
 		const icon = L.DomUtil.create("div", "leaflet-control-opencage-geocoding-icon", container);
-		const form = L.DomUtil.create("form", "leaflet-control-opencage-geocoding-form", container);
+		const form = L.DomUtil.create("form", className + "-form", container);
 		this._form = form;
 		this._map = map;
 		this._container = container;
@@ -186,22 +187,23 @@ var OpenCageGeocodingControl = class extends L.Control {
 		input.placeholder = this.options.placeholder;
 		L.DomEvent.addListener(input, "keydown", this._keydown, this);
 		this._errorElement = document.createElement("div");
-		this._errorElement.className = "leaflet-control-opencage-geocoding-form-no-error";
+		this._errorElement.className = className + "-form-no-error";
 		this._errorElement.textContent = this.options.errorMessage;
-		this._alts = L.DomUtil.create("ul", "leaflet-control-opencage-geocoding-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
+		this._alts = L.DomUtil.create("ul", className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
 		form.appendChild(input);
 		form.appendChild(this._errorElement);
 		container.appendChild(this._alts);
 		L.DomEvent.addListener(form, "submit", this._geocode, this);
-		if (this.options.collapsed) if (this.options.expand === "click") L.DomEvent.addListener(icon, "click", (e) => {
-			if (e.button === 0 && e.detail !== 2) this._toggle();
-		}, this);
-		else {
-			L.DomEvent.addListener(icon, "mouseover", this._expand, this);
-			L.DomEvent.addListener(icon, "mouseout", this._collapse, this);
-			this._map.on("movestart", this._collapse, this);
-		}
-		else this._expand();
+		if (this.options.collapsed) {
+			if (this.options.expand === "click") L.DomEvent.addListener(icon, "click", (e) => {
+				if (e.button === 0 && e.detail !== 2) this._toggle();
+			}, this);
+			else {
+				L.DomEvent.addListener(icon, "mouseover", this._expand, this);
+				L.DomEvent.addListener(icon, "mouseout", this._collapse, this);
+				this._map.on("movestart", this._collapse, this);
+			}
+		} else this._expand();
 		L.DomEvent.disableClickPropagation(container);
 		return container;
 	}

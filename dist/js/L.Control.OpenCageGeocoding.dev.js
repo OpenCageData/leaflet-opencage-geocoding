@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.5.0 - 2026-08-27
+ * OpenCage Data Geocoding Control v2.5.0 - 2026-08-28
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -203,9 +203,10 @@
 			if (!this.options.geocoder) this.options.geocoder = new OpenCageGeocoder(this.options);
 		}
 		onAdd(map) {
-			const container = leaflet.default.DomUtil.create("div", "leaflet-control-opencage-geocoding");
+			const className = "leaflet-control-opencage-geocoding";
+			const container = leaflet.default.DomUtil.create("div", className);
 			const icon = leaflet.default.DomUtil.create("div", "leaflet-control-opencage-geocoding-icon", container);
-			const form = leaflet.default.DomUtil.create("form", "leaflet-control-opencage-geocoding-form", container);
+			const form = leaflet.default.DomUtil.create("form", className + "-form", container);
 			this._form = form;
 			this._map = map;
 			this._container = container;
@@ -215,22 +216,23 @@
 			input.placeholder = this.options.placeholder;
 			leaflet.default.DomEvent.addListener(input, "keydown", this._keydown, this);
 			this._errorElement = document.createElement("div");
-			this._errorElement.className = "leaflet-control-opencage-geocoding-form-no-error";
+			this._errorElement.className = className + "-form-no-error";
 			this._errorElement.textContent = this.options.errorMessage;
-			this._alts = leaflet.default.DomUtil.create("ul", "leaflet-control-opencage-geocoding-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
+			this._alts = leaflet.default.DomUtil.create("ul", className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
 			form.appendChild(input);
 			form.appendChild(this._errorElement);
 			container.appendChild(this._alts);
 			leaflet.default.DomEvent.addListener(form, "submit", this._geocode, this);
-			if (this.options.collapsed) if (this.options.expand === "click") leaflet.default.DomEvent.addListener(icon, "click", (e) => {
-				if (e.button === 0 && e.detail !== 2) this._toggle();
-			}, this);
-			else {
-				leaflet.default.DomEvent.addListener(icon, "mouseover", this._expand, this);
-				leaflet.default.DomEvent.addListener(icon, "mouseout", this._collapse, this);
-				this._map.on("movestart", this._collapse, this);
-			}
-			else this._expand();
+			if (this.options.collapsed) {
+				if (this.options.expand === "click") leaflet.default.DomEvent.addListener(icon, "click", (e) => {
+					if (e.button === 0 && e.detail !== 2) this._toggle();
+				}, this);
+				else {
+					leaflet.default.DomEvent.addListener(icon, "mouseover", this._expand, this);
+					leaflet.default.DomEvent.addListener(icon, "mouseout", this._collapse, this);
+					this._map.on("movestart", this._collapse, this);
+				}
+			} else this._expand();
 			leaflet.default.DomEvent.disableClickPropagation(container);
 			return container;
 		}
