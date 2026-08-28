@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import L from 'leaflet';
+import { LatLng } from 'leaflet';
+import { geocode } from 'opencage-api-client';
 import { OpenCageGeocoder } from '../src/js/geocoder.js';
+
+vi.mock('opencage-api-client', () => ({ geocode: vi.fn() }));
 
 describe('OpenCageGeocoder', () => {
   let geocoder;
@@ -123,10 +126,10 @@ describe('OpenCageGeocoder', () => {
     const reverse = (location) =>
       geocoder.reverse(location, 10, mockCallback, mockContext);
 
-    const paramsOfLastRequest = () => mockMakeRequest.mock.calls.at(-1)[1];
+    const paramsOfLastRequest = () => mockMakeRequest.mock.calls.at(-1)[0];
 
     it.each([
-      ['an L.LatLng', L.latLng(51.5, -0.12)],
+      ['a LatLng', new LatLng(51.5, -0.12)],
       ['a {lat, lng} object', { lat: 51.5, lng: -0.12 }],
       ['a [lat, lng] array', [51.5, -0.12]],
     ])('should send a "lat,lng" query for %s', (_label, location) => {
@@ -161,7 +164,7 @@ describe('OpenCageGeocoder', () => {
     });
 
     it('should deliver processed results to the callback in context', () => {
-      mockMakeRequest.mockImplementation((url, params, cb) =>
+      mockMakeRequest.mockImplementation((params, cb) =>
         cb({
           results: [
             { formatted: 'Test Location', geometry: { lat: 51.5, lng: -0.1 } },
@@ -190,51 +193,41 @@ describe('OpenCageGeocoder', () => {
   });
 
   describe('_makeRequest', () => {
-    const url = 'https://api.opencagedata.com/geocode/v1/json/';
     const params = { key: 'test-api-key', q: 'London' };
+
+    beforeEach(() => {
+      geocode.mockReset();
+    });
 
     afterEach(() => {
       vi.useRealTimers();
     });
 
-    it('should fetch the correct URL and call callback with data', async () => {
+    it('should query the client and call callback with data', async () => {
       const mockData = { results: [] };
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue(mockData),
-      });
+      geocode.mockResolvedValue(mockData);
       const handler = vi.fn();
 
-      await geocoder._makeRequest(url, params, handler);
+      await geocoder._makeRequest(params, handler);
 
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining(url));
+      expect(geocode).toHaveBeenCalledWith(params);
       expect(handler).toHaveBeenCalledWith(mockData);
     });
 
     it.each([
       [
-        'a non-ok response',
-        () => global.fetch.mockResolvedValue({ ok: false }),
-      ],
-      [
         'a network error',
-        () => global.fetch.mockRejectedValue(new Error('Network error')),
+        () => geocode.mockRejectedValue(new Error('Network error')),
       ],
       [
-        'malformed JSON',
-        () =>
-          global.fetch.mockResolvedValue({
-            ok: true,
-            json: vi
-              .fn()
-              .mockRejectedValue(new SyntaxError('Unexpected token')),
-          }),
+        'an API error',
+        () => geocode.mockRejectedValue({ status: { code: 402 } }),
       ],
-    ])('should deliver empty results on %s', async (_label, stubFetch) => {
-      stubFetch();
+    ])('should deliver empty results on %s', async (_label, stubGeocode) => {
+      stubGeocode();
       const handler = vi.fn();
 
-      await geocoder._makeRequest(url, params, handler);
+      await geocoder._makeRequest(params, handler);
 
       expect(handler).toHaveBeenCalledWith({ results: [] });
     });
@@ -242,17 +235,14 @@ describe('OpenCageGeocoder', () => {
     it('should invoke a throwing handler once, then re-throw asynchronously', async () => {
       vi.useFakeTimers();
       const payload = { results: [{ formatted: 'x' }] };
-      global.fetch.mockResolvedValue({
-        ok: true,
-        json: vi.fn().mockResolvedValue(payload),
-      });
+      geocode.mockResolvedValue(payload);
       const boom = new Error('bug in the result handler');
       const handler = vi.fn(() => {
         throw boom;
       });
 
       // Awaiting settles every delivery; the re-throw is a pending timer.
-      await geocoder._makeRequest(url, params, handler);
+      await geocoder._makeRequest(params, handler);
 
       // Exactly one call, with the real payload - never a second, empty one.
       expect(handler.mock.calls).toEqual([[payload]]);
