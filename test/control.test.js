@@ -97,6 +97,22 @@ describe('OpenCageGeocodingControl', () => {
     });
   });
 
+  describe('_geocodeResult', () => {
+    it('should replace the previous result list', () => {
+      // setup.js mocks document.createElement; use real jsdom elements
+      const el = (tag) => Document.prototype.createElement.call(document, tag);
+      control.onAdd(mockMap);
+      control._alts = el('ul');
+      control._createAlt = (r) =>
+        Object.assign(el('li'), { textContent: r.name });
+
+      control._geocodeResult([{ name: 'a' }, { name: 'b' }, { name: 'c' }]);
+      control._geocodeResult([{ name: 'x' }, { name: 'y' }]);
+
+      expect(control._alts.textContent).toBe('xy');
+    });
+  });
+
   describe('_geocodeResultSelected', () => {
     const mockResult = {
       name: 'Test Location',

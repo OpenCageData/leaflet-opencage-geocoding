@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.5.0 - 2026-08-28
+ * OpenCage Data Geocoding Control v2.5.0 - 2026-11-18
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -9,7 +9,7 @@
  * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
  */
 import L from "leaflet";
-//#region src/js/geocoder.js
+// src/js/geocoder.js
 /**
 * Geocoder class for OpenCage API interactions
 */
@@ -149,8 +149,7 @@ var OpenCageGeocoder = class {
 		});
 	}
 };
-//#endregion
-//#region src/js/L.Control.OpenCageGeocoding.js
+// src/js/L.Control.OpenCageGeocoding.js
 /**
 * OpenCage Geocoding Control for Leaflet
 */
@@ -214,7 +213,7 @@ var OpenCageGeocodingControl = class extends L.Control {
 		L.DomUtil.removeClass(this._container, "leaflet-control-opencage-geocoding-spinner");
 		if (results.length === 1) this._geocodeResultSelected(results[0]);
 		else if (results.length > 0) {
-			this._alts.innerText = "";
+			this._alts.replaceChildren();
 			this._results = results;
 			L.DomUtil.removeClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 			for (let i = 0; i < results.length; i++) this._alts.appendChild(this._createAlt(results[i], i));
@@ -347,7 +346,6 @@ Object.assign(L.Control, {
 	OpenCageGeocoding: OpenCageGeocodingControl,
 	openCageGeocoding
 });
-//#endregion
 export { OpenCageGeocoder, OpenCageGeocodingControl, OpenCageGeocodingControl as default, openCageGeocoding };
 
 //# sourceMappingURL=L.Control.OpenCageGeocoding.esm.js.map

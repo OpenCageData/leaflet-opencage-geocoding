@@ -103,7 +103,7 @@ export class OpenCageGeocodingControl extends L.Control {
     if (results.length === 1) {
       this._geocodeResultSelected(results[0]);
     } else if (results.length > 0) {
-      this._alts.innerText = '';
+      this._alts.replaceChildren();
       this._results = results;
       L.DomUtil.removeClass(
         this._alts,

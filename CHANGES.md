@@ -1,3 +1,7 @@
+* unreleased
+    * Test suite: also test against node version 26, no longer version 20
+    * NPM package updates: vitest
+
 * version 2.5.0 - 2026-08-28
     * Fix: `reverse()` now builds its own `q=lat,lng` query instead of stringifying the location object
     * Fix: `reverseQueryParams` was declared but never used. Now used, added tests

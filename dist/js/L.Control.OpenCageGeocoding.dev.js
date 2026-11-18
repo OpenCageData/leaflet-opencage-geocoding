@@ -1,5 +1,5 @@
 /**
- * OpenCage Data Geocoding Control v2.5.0 - 2026-08-28
+ * OpenCage Data Geocoding Control v2.5.0 - 2026-11-18
  * Copyright (c) 2026, OpenCage GmbH 
  * support@opencagedata.com 
  * https://opencagedata.com 
@@ -15,7 +15,7 @@
 		__esModule: { value: true },
 		[Symbol.toStringTag]: { value: "Module" }
 	});
-	//#region \0rolldown/runtime.js
+	// \0rolldown/runtime.js
 	var __create = Object.create;
 	var __defProp = Object.defineProperty;
 	var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -36,9 +36,8 @@
 		value: mod,
 		enumerable: true
 	}) : target, mod));
-	//#endregion
 	leaflet = __toESM(leaflet, 1);
-	//#region src/js/geocoder.js
+	// src/js/geocoder.js
 	/**
 	* Geocoder class for OpenCage API interactions
 	*/
@@ -178,8 +177,7 @@
 			});
 		}
 	};
-	//#endregion
-	//#region src/js/L.Control.OpenCageGeocoding.js
+	// src/js/L.Control.OpenCageGeocoding.js
 	/**
 	* OpenCage Geocoding Control for Leaflet
 	*/
@@ -243,7 +241,7 @@
 			leaflet.default.DomUtil.removeClass(this._container, "leaflet-control-opencage-geocoding-spinner");
 			if (results.length === 1) this._geocodeResultSelected(results[0]);
 			else if (results.length > 0) {
-				this._alts.innerText = "";
+				this._alts.replaceChildren();
 				this._results = results;
 				leaflet.default.DomUtil.removeClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 				for (let i = 0; i < results.length; i++) this._alts.appendChild(this._createAlt(results[i], i));
@@ -376,7 +374,6 @@
 		OpenCageGeocoding: OpenCageGeocodingControl,
 		openCageGeocoding
 	});
-	//#endregion
 	exports.OpenCageGeocoder = OpenCageGeocoder;
 	exports.OpenCageGeocodingControl = OpenCageGeocodingControl;
 	exports.default = OpenCageGeocodingControl;
