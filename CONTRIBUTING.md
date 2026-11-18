@@ -76,7 +76,7 @@ npm run lint
 
 ## Releasing
 
-1. Update version in `package.json`
+1. Update version in `package.json`, and in the CDN links in `README.md`
 
 2. git commit, git push
 

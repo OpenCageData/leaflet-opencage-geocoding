@@ -47,9 +47,9 @@ For classic HTML projects, you can use the CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css"
+  href="https://cdn.jsdelivr.net/npm/@opencage/leaflet-opencage-geocoding@2.5.0/dist/css/L.Control.OpenCageGeocoding.min.css"
 />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@opencage/leaflet-opencage-geocoding@2.5.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
 ### Other options
@@ -62,8 +62,8 @@ For classic HTML projects, you can use the CDN:
 Load the plugin's CSS and JavaScript files:
 
 ```HTML
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/opencagedata/leaflet-opencage-geocoding@v2.1.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@opencage/leaflet-opencage-geocoding@2.5.0/dist/css/L.Control.OpenCageGeocoding.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/@opencage/leaflet-opencage-geocoding@2.5.0/dist/js/L.Control.OpenCageGeocoding.min.js"></script>
 ```
 
 Add the plugin's control to an `L.Map` instance:
