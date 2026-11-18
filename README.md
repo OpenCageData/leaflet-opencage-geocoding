@@ -8,7 +8,9 @@ Note: if you want location autosuggest then what you want is [OpenCage's geosear
 
 ## Dependencies
 
-Leaflet version 0.7+ to 1.9.x
+Leaflet version 1.9.x
+
+Browsers: Chrome/Edge 111+, Firefox 114+, Safari 16.4+ (the default build target of [Vite](https://vite.dev/config/build-options.html#build-target), which builds this plugin). Internet Explorer is not supported.
 
 For Leaflet version 2: check the [release branch v3.x](https://github.com/OpenCageData/leaflet-opencage-geocoding/tree/release/v3.0.0)
 
@@ -16,7 +18,7 @@ For Leaflet version 2: check the [release branch v3.x](https://github.com/OpenCa
 
 Starting with version 2.1, Bower is no longer supported. The package is now published on npm in both UMD and ESM formats.
 
-Starting with version 2.4, this plugin uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API). All modern browsers support it natively. If you need to support older browsers (IE11 and below), add a polyfill such as [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch):
+Starting with version 2.4, this plugin uses the native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) instead of JSONP.
 
 ## Installation
 

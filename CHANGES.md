@@ -1,4 +1,6 @@
 - unreleased
+  - Support leaflet 1.9.x (released September 2022), not older versions
+  - Remove support for Internet Explorer 11
   - Test suite: also test against node version 26, no longer version 20
   - NPM package updates: vitest
 
