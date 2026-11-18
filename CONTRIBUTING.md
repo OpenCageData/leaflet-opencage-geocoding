@@ -62,6 +62,12 @@ Format code with Prettier:
 npm run format
 ```
 
+CI fails if any file is not formatted. To check without changing files:
+
+```bash
+npm run format:check
+```
+
 Check code style with ESLint:
 
 ```bash

@@ -32,7 +32,8 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "format": "prettier --write \"**/*.+(js|json|md)\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "clean": "rm -rf dist"
   },
   "main": "dist/js/L.Control.OpenCageGeocoding.min.js",

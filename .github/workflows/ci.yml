@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: 'npm'
 
       # npm ci installs exactly what package-lock.json records, and fails if the
       # lockfile is out of sync with package.json. If that happens, the lockfile
@@ -35,6 +35,9 @@ jobs:
 
       - name: Run linter
         run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
 
       - name: Run tests
         run: npm test
@@ -56,7 +59,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.x
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
