@@ -89,6 +89,54 @@ describe('OpenCageGeocoder', () => {
       const results = geocoder._processResults(mockApiData);
       expect(results[0].bounds).toBeUndefined();
     });
+
+    it.each([
+      undefined,
+      null,
+      {},
+      { results: null },
+      { results: 'nope' },
+      { results: {} },
+      { results: [null, 'x', 42] },
+    ])('should return [] instead of throwing for %j', (payload) => {
+      expect(geocoder._processResults(payload)).toEqual([]);
+    });
+
+    it('should skip entries without usable coordinates, keeping the rest in order', () => {
+      const at = (lat, lng) => ({
+        formatted: `${lat}`,
+        geometry: { lat, lng },
+      });
+      const results = geocoder._processResults({
+        results: [
+          at(1, 1),
+          { formatted: 'no geometry' },
+          { formatted: 'null geometry', geometry: null },
+          at(null, 1),
+          at('', 1),
+          at(true, 1),
+          at('abc', 1),
+          at(Infinity, 1),
+          at('2.5', 1), // numeric strings are fine, as in L.latLng
+          at(3, 1),
+        ],
+      });
+      expect(results.map((r) => r.center.lat)).toEqual([1, 2.5, 3]);
+    });
+
+    it('should keep a result with malformed bounds, without bounds', () => {
+      const [result] = geocoder._processResults({
+        results: [
+          {
+            formatted: 'x',
+            geometry: { lat: 1, lng: 2 },
+            bounds: { southwest: { lat: 0, lng: 0 } },
+          },
+        ],
+      });
+      expect(result.center.lat).toBe(1);
+      expect(result.bounds).toBeUndefined();
+    });
   });
 
   describe('geocode', () => {
@@ -108,6 +156,14 @@ describe('OpenCageGeocoder', () => {
         }),
         expect.any(Function)
       );
+    });
+
+    it('should call back with [] for a 200 response without results', async () => {
+      global.fetch.mockResolvedValue({ ok: true, json: async () => ({}) });
+
+      geocoder.geocode('London', mockCallback, mockContext);
+
+      await vi.waitFor(() => expect(mockCallback).toHaveBeenCalledWith([]));
     });
   });
 

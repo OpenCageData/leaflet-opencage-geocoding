@@ -1,5 +1,17 @@
 import L from 'leaflet';
 
+// A finite number, or a string holding one: what L.latLng handles correctly.
+// L.latLng itself is not a safe validator: it returns null for null, and
+// turns '' or true into 0 or 1 instead of rejecting them.
+const isCoordinate = (v) =>
+  (typeof v === 'number' || (typeof v === 'string' && v.trim() !== '')) &&
+  Number.isFinite(Number(v));
+
+const toLatLng = (point) =>
+  point && isCoordinate(point.lat) && isCoordinate(point.lng)
+    ? L.latLng(point.lat, point.lng)
+    : null;
+
 /**
  * Geocoder class for OpenCage API interactions
  */
@@ -95,33 +107,31 @@ export class OpenCageGeocoder {
    * @private
    */
   _processResults(data) {
+    // Never throws: a throw here would mean the callback is never called and
+    // the control keeps spinning. A bad entry is skipped, not the response.
+    const apiResults = Array.isArray(data?.results) ? data.results : [];
     const results = [];
 
-    for (let i = data.results.length - 1; i >= 0; i--) {
-      results[i] = {
-        name: data.results[i].formatted,
-        center: L.latLng(
-          data.results[i].geometry.lat,
-          data.results[i].geometry.lng
-        ),
-      };
+    for (const apiResult of apiResults) {
+      const center = toLatLng(apiResult?.geometry);
+      if (!center) {
+        continue;
+      }
 
-      if (data.results[i].bounds) {
-        results[i].bounds = L.latLngBounds(
-          [
-            data.results[i].bounds.southwest.lat,
-            data.results[i].bounds.southwest.lng,
-          ],
-          [
-            data.results[i].bounds.northeast.lat,
-            data.results[i].bounds.northeast.lng,
-          ]
-        );
+      const result = { name: apiResult.formatted, center };
+
+      // Malformed bounds are dropped; the result itself is still usable.
+      const southWest = toLatLng(apiResult.bounds?.southwest);
+      const northEast = toLatLng(apiResult.bounds?.northeast);
+      if (southWest && northEast) {
+        result.bounds = L.latLngBounds(southWest, northEast);
       }
 
       if (this.options.resultExtension) {
-        this._addResultExtensions(results[i], data.results[i]);
+        this._addResultExtensions(result, apiResult);
       }
+
+      results.push(result);
     }
 
     return results;

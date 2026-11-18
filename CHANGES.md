@@ -1,7 +1,9 @@
 - unreleased
   - Support leaflet 1.9.x (released September 2022), not older versions
   - Remove support for Internet Explorer 11
+  - Fix: stricter validation of returned data structure
   - Test suite: also test against node version 26, no longer version 20
+  - Test suite: enforce code (and CSS and even CHANGES.md) style
   - NPM package updates: vitest
 
 - version 2.5.0 - 2026-08-28
