@@ -113,6 +113,50 @@ describe('OpenCageGeocodingControl', () => {
     });
   });
 
+  describe('_keydown', () => {
+    // jsdom leaves keyCode at 0, so these only pass when e.key is used
+    const press = (key, init) => {
+      const e = new KeyboardEvent('keydown', {
+        key,
+        cancelable: true,
+        ...init,
+      });
+      control._keydown(e);
+      return e;
+    };
+    let selected;
+
+    beforeEach(() => {
+      control.onAdd(mockMap);
+      // real jsdom <ul>; setup.js mocks document.createElement
+      control._alts = Document.prototype.createElement.call(document, 'ul');
+      control._alts.innerHTML =
+        '<li><a data-result-index="0"></a></li><li><a data-result-index="1"></a></li>';
+      control._results = ['first', 'second'];
+      selected = vi.spyOn(control, '_geocodeResultSelected');
+      selected.mockImplementation(() => {});
+    });
+
+    it('should navigate with arrow keys and select with Enter', () => {
+      press('ArrowDown');
+      press('ArrowDown');
+      expect(press('ArrowUp').defaultPrevented).toBe(true);
+      expect(press('Enter').defaultPrevented).toBe(true);
+      expect(selected).toHaveBeenCalledWith('first');
+    });
+
+    it('should close the result list on Escape', () => {
+      press('Escape');
+      expect(control._alts.className).toContain('alternatives-minimized');
+    });
+
+    it('should ignore Enter while an IME composition is in progress', () => {
+      press('ArrowDown');
+      press('Enter', { isComposing: true });
+      expect(selected).not.toHaveBeenCalled();
+    });
+  });
+
   describe('_geocodeResultSelected', () => {
     const mockResult = {
       name: 'Test Location',

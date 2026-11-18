@@ -309,16 +309,29 @@ export class OpenCageGeocodingControl extends L.Control {
       }
     };
 
-    switch (e.keyCode) {
-      case 38: // Up
+    // Ignore keys that confirm an IME composition (e.g. Japanese input):
+    // Enter there must not pick a result. keyCode 229 covers Safari, which
+    // reports isComposing: false on that keydown.
+    if (e.isComposing || e.keyCode === 229) {
+      return true;
+    }
+
+    switch (e.key) {
+      case 'ArrowUp':
         select(-1);
         L.DomEvent.preventDefault(e);
         break;
-      case 40: // Down
+      case 'ArrowDown':
         select(1);
         L.DomEvent.preventDefault(e);
         break;
-      case 13: // Enter
+      case 'Escape':
+        // Close the result list only. Collapsing the whole control would
+        // strand keyboard users, since the icon that reopens it cannot be
+        // focused.
+        this._clearResults();
+        break;
+      case 'Enter':
         if (this._selection) {
           const index = parseInt(
             this._selection.firstChild.getAttribute('data-result-index'),

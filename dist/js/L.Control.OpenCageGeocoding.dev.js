@@ -344,16 +344,20 @@
 				if (!this._selection) this._selection = this._alts[dir > 0 ? "firstChild" : "lastChild"];
 				if (this._selection) leaflet.default.DomUtil.addClass(this._selection.firstChild, "leaflet-control-opencage-geocoding-selected");
 			};
-			switch (e.keyCode) {
-				case 38:
+			if (e.isComposing || e.keyCode === 229) return true;
+			switch (e.key) {
+				case "ArrowUp":
 					select(-1);
 					leaflet.default.DomEvent.preventDefault(e);
 					break;
-				case 40:
+				case "ArrowDown":
 					select(1);
 					leaflet.default.DomEvent.preventDefault(e);
 					break;
-				case 13: if (this._selection) {
+				case "Escape":
+					this._clearResults();
+					break;
+				case "Enter": if (this._selection) {
 					const index = parseInt(this._selection.firstChild.getAttribute("data-result-index"), 10);
 					this._geocodeResultSelected(this._results[index]);
 					this._clearResults();
