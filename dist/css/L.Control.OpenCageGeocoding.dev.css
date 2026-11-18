@@ -87,10 +87,6 @@ button.leaflet-control-opencage-geocoding-icon {
   display: none;
 }
 
-.leaflet-control-opencage-geocoding-form-no-error {
-  display: none;
-}
-
 .leaflet-control-opencage-geocoding-error {
   margin-top: 8px;
   display: block;
