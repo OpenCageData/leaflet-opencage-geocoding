@@ -93,12 +93,15 @@ For example:
 var control = L.Control.openCageGeocoding(options).addTo(map);
 
 control.markGeocode = function (result) {
-  var bbox = result.bbox;
+  var bounds = result.bounds; // an L.LatLngBounds, absent for some results
+  if (!bounds) {
+    return;
+  }
   L.polygon([
-    bbox.getSouthEast(),
-    bbox.getNorthEast(),
-    bbox.getNorthWest(),
-    bbox.getSouthWest(),
+    bounds.getSouthEast(),
+    bounds.getNorthEast(),
+    bounds.getNorthWest(),
+    bounds.getSouthWest(),
   ]).addTo(map);
 };
 ```
