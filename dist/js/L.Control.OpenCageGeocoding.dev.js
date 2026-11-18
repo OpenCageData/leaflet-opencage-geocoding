@@ -198,6 +198,7 @@
 				expand: "click",
 				position: "topright",
 				placeholder: "Search...",
+				iconLabel: "Search",
 				errorMessage: "Nothing found.",
 				key: "",
 				onResultClick: void 0,
@@ -210,7 +211,13 @@
 		onAdd(map) {
 			const className = "leaflet-control-opencage-geocoding";
 			const container = leaflet.default.DomUtil.create("div", className);
-			const icon = leaflet.default.DomUtil.create("div", "leaflet-control-opencage-geocoding-icon", container);
+			const icon = leaflet.default.DomUtil.create(this.options.collapsed ? "button" : "div", "leaflet-control-opencage-geocoding-icon", container);
+			this._icon = icon;
+			if (this.options.collapsed) {
+				icon.type = "button";
+				icon.setAttribute("aria-label", this.options.iconLabel);
+				icon.setAttribute("aria-expanded", "false");
+			}
 			const form = leaflet.default.DomUtil.create("form", className + "-form", container);
 			this._form = form;
 			this._map = map;
@@ -235,6 +242,7 @@
 				else {
 					leaflet.default.DomEvent.addListener(icon, "mouseover", this._expand, this);
 					leaflet.default.DomEvent.addListener(icon, "mouseout", this._collapse, this);
+					leaflet.default.DomEvent.addListener(icon, "click", this._expand, this);
 					this._map.on("movestart", this._collapse, this);
 				}
 			} else this._expand();
@@ -297,6 +305,7 @@
 		*/
 		_expand() {
 			leaflet.default.DomUtil.addClass(this._container, "leaflet-control-opencage-geocoding-expanded");
+			this._setExpanded(true);
 			this._input.select();
 		}
 		/**
@@ -304,8 +313,15 @@
 		*/
 		_collapse() {
 			this._container.className = this._container.className.replace(" leaflet-control-opencage-geocoding-expanded", "");
+			this._setExpanded(false);
 			leaflet.default.DomUtil.addClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 			leaflet.default.DomUtil.removeClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+		}
+		/**
+		* Tell assistive technology whether the toggle button's control is open
+		*/
+		_setExpanded(expanded) {
+			if (this.options.collapsed) this._icon.setAttribute("aria-expanded", String(expanded));
 		}
 		/**
 		* Clear results display

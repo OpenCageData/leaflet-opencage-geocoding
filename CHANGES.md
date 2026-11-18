@@ -2,6 +2,7 @@
   - Support leaflet 1.9.x (released September 2022), not older versions
   - Remove support for Internet Explorer 11
   - Fix: stricter validation of returned data structure
+  - Accessibility: convert the trigger button to an actual HTML button 
   - Test suite: also test against node version 26, no longer version 20
   - Test suite: enforce code (and CSS and even CHANGES.md) style
   - NPM package updates: vitest

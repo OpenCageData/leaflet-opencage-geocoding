@@ -170,6 +170,7 @@ var OpenCageGeocodingControl = class extends L.Control {
 			expand: "click",
 			position: "topright",
 			placeholder: "Search...",
+			iconLabel: "Search",
 			errorMessage: "Nothing found.",
 			key: "",
 			onResultClick: void 0,
@@ -182,7 +183,13 @@ var OpenCageGeocodingControl = class extends L.Control {
 	onAdd(map) {
 		const className = "leaflet-control-opencage-geocoding";
 		const container = L.DomUtil.create("div", className);
-		const icon = L.DomUtil.create("div", "leaflet-control-opencage-geocoding-icon", container);
+		const icon = L.DomUtil.create(this.options.collapsed ? "button" : "div", "leaflet-control-opencage-geocoding-icon", container);
+		this._icon = icon;
+		if (this.options.collapsed) {
+			icon.type = "button";
+			icon.setAttribute("aria-label", this.options.iconLabel);
+			icon.setAttribute("aria-expanded", "false");
+		}
 		const form = L.DomUtil.create("form", className + "-form", container);
 		this._form = form;
 		this._map = map;
@@ -207,6 +214,7 @@ var OpenCageGeocodingControl = class extends L.Control {
 			else {
 				L.DomEvent.addListener(icon, "mouseover", this._expand, this);
 				L.DomEvent.addListener(icon, "mouseout", this._collapse, this);
+				L.DomEvent.addListener(icon, "click", this._expand, this);
 				this._map.on("movestart", this._collapse, this);
 			}
 		} else this._expand();
@@ -269,6 +277,7 @@ var OpenCageGeocodingControl = class extends L.Control {
 	*/
 	_expand() {
 		L.DomUtil.addClass(this._container, "leaflet-control-opencage-geocoding-expanded");
+		this._setExpanded(true);
 		this._input.select();
 	}
 	/**
@@ -276,8 +285,15 @@ var OpenCageGeocodingControl = class extends L.Control {
 	*/
 	_collapse() {
 		this._container.className = this._container.className.replace(" leaflet-control-opencage-geocoding-expanded", "");
+		this._setExpanded(false);
 		L.DomUtil.addClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 		L.DomUtil.removeClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+	}
+	/**
+	* Tell assistive technology whether the toggle button's control is open
+	*/
+	_setExpanded(expanded) {
+		if (this.options.collapsed) this._icon.setAttribute("aria-expanded", String(expanded));
 	}
 	/**
 	* Clear results display

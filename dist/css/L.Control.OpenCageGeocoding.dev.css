@@ -45,6 +45,21 @@
   cursor: pointer;
 }
 
+/* The icon is a <button> when it opens the control: undo the browser's
+   button styling so it looks the same as the decorative icon. Only
+   background-color is reset, so the icon image is kept. */
+button.leaflet-control-opencage-geocoding-icon {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .leaflet-touch .leaflet-control-opencage-geocoding-icon {
   margin-top: 2px;
   width: 30px;

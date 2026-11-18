@@ -120,6 +120,7 @@ var options = {
     limit: 5 // number of results to be displayed
     position: 'topright',
     placeholder: 'Search...', // the text in the empty search box
+    iconLabel: 'Search', // screen-reader name of the button that opens the control
     errorMessage: 'Nothing found.',
     showResultIcons: false,
     collapsed: true,

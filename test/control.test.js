@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { OpenCageGeocodingControl } from '../src/js/L.Control.OpenCageGeocoding.js';
 
 describe('OpenCageGeocodingControl', () => {
@@ -94,6 +94,63 @@ describe('OpenCageGeocodingControl', () => {
 
       control._toggle();
       expect(collapseSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe('toggle button', () => {
+    const mockedCreateElement = document.createElement;
+    // Enter or Space on a <button> fires a click with detail 0
+    const activate = (el) =>
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 0 }));
+    const add = (options) => {
+      const c = new OpenCageGeocodingControl({ key: 'k', ...options });
+      document.body.appendChild(c.onAdd(mockMap));
+      return c;
+    };
+
+    beforeEach(() => {
+      // real DOM, so focus and events behave as in a browser
+      document.createElement = Document.prototype.createElement;
+    });
+
+    afterEach(() => {
+      document.createElement = mockedCreateElement;
+      document.body.replaceChildren();
+    });
+
+    it('should be a focusable, labelled button', () => {
+      const icon = add()._container.firstChild;
+      icon.focus();
+
+      expect(document.activeElement).toBe(icon);
+      expect(icon.tagName).toBe('BUTTON');
+      expect(icon.type).toBe('button');
+      expect(icon.getAttribute('aria-label')).toBe('Search');
+      expect(icon.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('should open and close the control from the keyboard', () => {
+      const c = add();
+      const icon = c._container.firstChild;
+
+      activate(icon);
+      expect(c._container.className).toContain('expanded');
+      expect(icon.getAttribute('aria-expanded')).toBe('true');
+
+      activate(icon);
+      expect(c._container.className).not.toContain('expanded');
+      expect(icon.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('should open from the keyboard in hover mode too', () => {
+      const c = add({ expand: 'hover' });
+      activate(c._container.firstChild);
+      expect(c._container.className).toContain('expanded');
+    });
+
+    it('should stay a decorative <div> when the control cannot collapse', () => {
+      const icon = add({ collapsed: false })._container.firstChild;
+      expect(icon.tagName).toBe('DIV');
     });
   });
 

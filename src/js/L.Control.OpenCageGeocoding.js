@@ -14,6 +14,7 @@ export class OpenCageGeocodingControl extends L.Control {
       expand: 'click',
       position: 'topright',
       placeholder: 'Search...',
+      iconLabel: 'Search',
       errorMessage: 'Nothing found.',
       key: '',
       onResultClick: undefined,
@@ -29,11 +30,19 @@ export class OpenCageGeocodingControl extends L.Control {
   onAdd(map) {
     const className = 'leaflet-control-opencage-geocoding';
     const container = L.DomUtil.create('div', className);
+    // A real button when it opens the control, so keyboard users can reach
+    // it; otherwise it only shows the spinner and stays out of the tab order.
     const icon = L.DomUtil.create(
-      'div',
+      this.options.collapsed ? 'button' : 'div',
       'leaflet-control-opencage-geocoding-icon',
       container
     );
+    this._icon = icon;
+    if (this.options.collapsed) {
+      icon.type = 'button';
+      icon.setAttribute('aria-label', this.options.iconLabel);
+      icon.setAttribute('aria-expanded', 'false');
+    }
     const form = L.DomUtil.create('form', className + '-form', container);
     this._form = form;
 
@@ -78,6 +87,8 @@ export class OpenCageGeocodingControl extends L.Control {
       } else {
         L.DomEvent.addListener(icon, 'mouseover', this._expand, this);
         L.DomEvent.addListener(icon, 'mouseout', this._collapse, this);
+        // keyboard users cannot hover; Enter/Space on the button opens it
+        L.DomEvent.addListener(icon, 'click', this._expand, this);
         this._map.on('movestart', this._collapse, this);
       }
     } else {
@@ -207,6 +218,7 @@ export class OpenCageGeocodingControl extends L.Control {
       this._container,
       'leaflet-control-opencage-geocoding-expanded'
     );
+    this._setExpanded(true);
     this._input.select();
   }
 
@@ -218,6 +230,7 @@ export class OpenCageGeocodingControl extends L.Control {
       ' leaflet-control-opencage-geocoding-expanded',
       ''
     );
+    this._setExpanded(false);
     L.DomUtil.addClass(
       this._alts,
       'leaflet-control-opencage-geocoding-alternatives-minimized'
@@ -226,6 +239,15 @@ export class OpenCageGeocodingControl extends L.Control {
       this._errorElement,
       'leaflet-control-opencage-geocoding-error'
     );
+  }
+
+  /**
+   * Tell assistive technology whether the toggle button's control is open
+   */
+  _setExpanded(expanded) {
+    if (this.options.collapsed) {
+      this._icon.setAttribute('aria-expanded', String(expanded));
+    }
   }
 
   /**
