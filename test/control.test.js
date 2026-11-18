@@ -154,6 +154,42 @@ describe('OpenCageGeocodingControl', () => {
     });
   });
 
+  describe('combobox semantics', () => {
+    const mockedCreateElement = document.createElement;
+    let c;
+
+    beforeEach(() => {
+      document.createElement = Document.prototype.createElement;
+      c = new OpenCageGeocodingControl({ key: 'k' });
+      document.body.appendChild(c.onAdd(mockMap));
+    });
+
+    afterEach(() => {
+      document.createElement = mockedCreateElement;
+      document.body.replaceChildren();
+    });
+
+    it('should point the combobox at the highlighted option', () => {
+      const input = c._input;
+      expect(input.getAttribute('role')).toBe('combobox');
+      expect(input.getAttribute('aria-controls')).toBe(c._alts.id);
+
+      c._geocodeResult([{ name: 'a' }, { name: 'b' }]);
+      c._keydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+
+      const first = c._alts.firstChild;
+      expect(first.getAttribute('role')).toBe('option');
+      expect(input.getAttribute('aria-activedescendant')).toBe(first.id);
+    });
+
+    it('should fill the status region only while the error shows', () => {
+      c._geocodeResult([]);
+      expect(c._errorElement.textContent).toBe('Nothing found.');
+      c._clearResults();
+      expect(c._errorElement.textContent).toBe('');
+    });
+  });
+
   describe('_geocodeResult', () => {
     it('should replace the previous result list', () => {
       // setup.js mocks document.createElement; use real jsdom elements

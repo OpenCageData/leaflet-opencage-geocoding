@@ -105,6 +105,7 @@ global.document.createElement = vi.fn().mockImplementation((tagName) => {
     appendChild: vi.fn(),
     setAttribute: vi.fn(),
     getAttribute: vi.fn(),
+    removeAttribute: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     click: vi.fn(),

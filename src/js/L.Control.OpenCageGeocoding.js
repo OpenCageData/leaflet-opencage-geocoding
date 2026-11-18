@@ -54,17 +54,31 @@ export class OpenCageGeocodingControl extends L.Control {
     input.type = 'text';
     input.placeholder = this.options.placeholder;
 
+    // Combobox pattern: focus stays in the input, which tells screen readers
+    // which result is highlighted via aria-activedescendant.
+    const listId = `${className}-results-${L.stamp(this)}`;
+    input.setAttribute('role', 'combobox');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('aria-expanded', 'false');
+    input.setAttribute('aria-controls', listId);
+    input.setAttribute('autocomplete', 'off');
+
     L.DomEvent.addListener(input, 'keydown', this._keydown, this);
 
+    // A status region. Its text is only filled in when the error is shown:
+    // screen readers announce changes, not text that was always there.
     this._errorElement = document.createElement('div');
     this._errorElement.className = className + '-form-no-error';
-    this._errorElement.textContent = this.options.errorMessage;
+    this._errorElement.setAttribute('role', 'status');
 
     this._alts = L.DomUtil.create(
       'ul',
       className +
         '-alternatives leaflet-control-opencage-geocoding-alternatives-minimized'
     );
+    this._alts.id = listId;
+    this._alts.setAttribute('role', 'listbox');
+    this._alts.setAttribute('aria-label', this.options.iconLabel);
 
     form.appendChild(input);
     form.appendChild(this._errorElement);
@@ -121,7 +135,9 @@ export class OpenCageGeocodingControl extends L.Control {
       for (let i = 0; i < results.length; i++) {
         this._alts.appendChild(this._createAlt(results[i], i));
       }
+      this._setListOpen(true);
     } else {
+      this._errorElement.textContent = this.options.errorMessage;
       L.DomUtil.addClass(
         this._errorElement,
         'leaflet-control-opencage-geocoding-error'
@@ -235,10 +251,12 @@ export class OpenCageGeocodingControl extends L.Control {
       this._alts,
       'leaflet-control-opencage-geocoding-alternatives-minimized'
     );
+    this._setListOpen(false);
     L.DomUtil.removeClass(
       this._errorElement,
       'leaflet-control-opencage-geocoding-error'
     );
+    this._errorElement.textContent = '';
   }
 
   /**
@@ -259,10 +277,23 @@ export class OpenCageGeocodingControl extends L.Control {
       'leaflet-control-opencage-geocoding-alternatives-minimized'
     );
     this._selection = null;
+    this._setListOpen(false);
     L.DomUtil.removeClass(
       this._errorElement,
       'leaflet-control-opencage-geocoding-error'
     );
+    this._errorElement.textContent = '';
+  }
+
+  /**
+   * Tell screen readers whether the result list is showing. A closed list
+   * has no highlighted result.
+   */
+  _setListOpen(open) {
+    this._input.setAttribute('aria-expanded', String(open));
+    if (!open) {
+      this._input.removeAttribute('aria-activedescendant');
+    }
   }
 
   /**
@@ -270,8 +301,15 @@ export class OpenCageGeocodingControl extends L.Control {
    */
   _createAlt(result, index) {
     const li = document.createElement('li');
+    li.id = `${this._alts.id}-${index}`;
+    li.setAttribute('role', 'option');
+    li.setAttribute('aria-selected', 'false');
     const a = document.createElement('a');
     a.href = '#';
+    // Results are reached with the arrow keys from the input, not with Tab.
+    // An option's content is presentational to screen readers, so the link
+    // needs no role of its own.
+    a.tabIndex = -1;
     a.dataset.resultIndex = index;
 
     if (this.options.showResultIcons && result.icon) {
@@ -313,6 +351,7 @@ export class OpenCageGeocodingControl extends L.Control {
           this._selection.firstChild,
           'leaflet-control-opencage-geocoding-selected'
         );
+        this._selection.setAttribute('aria-selected', 'false');
         this._selection =
           this._selection[dir > 0 ? 'nextSibling' : 'previousSibling'];
       }
@@ -326,6 +365,8 @@ export class OpenCageGeocodingControl extends L.Control {
           this._selection.firstChild,
           'leaflet-control-opencage-geocoding-selected'
         );
+        this._selection.setAttribute('aria-selected', 'true');
+        this._input.setAttribute('aria-activedescendant', this._selection.id);
       }
     };
 

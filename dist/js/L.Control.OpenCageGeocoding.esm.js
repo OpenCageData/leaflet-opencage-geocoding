@@ -198,11 +198,20 @@ var OpenCageGeocodingControl = class extends L.Control {
 		this._input = input;
 		input.type = "text";
 		input.placeholder = this.options.placeholder;
+		const listId = `${className}-results-${L.stamp(this)}`;
+		input.setAttribute("role", "combobox");
+		input.setAttribute("aria-autocomplete", "list");
+		input.setAttribute("aria-expanded", "false");
+		input.setAttribute("aria-controls", listId);
+		input.setAttribute("autocomplete", "off");
 		L.DomEvent.addListener(input, "keydown", this._keydown, this);
 		this._errorElement = document.createElement("div");
 		this._errorElement.className = className + "-form-no-error";
-		this._errorElement.textContent = this.options.errorMessage;
+		this._errorElement.setAttribute("role", "status");
 		this._alts = L.DomUtil.create("ul", className + "-alternatives leaflet-control-opencage-geocoding-alternatives-minimized");
+		this._alts.id = listId;
+		this._alts.setAttribute("role", "listbox");
+		this._alts.setAttribute("aria-label", this.options.iconLabel);
 		form.appendChild(input);
 		form.appendChild(this._errorElement);
 		container.appendChild(this._alts);
@@ -232,7 +241,11 @@ var OpenCageGeocodingControl = class extends L.Control {
 			this._results = results;
 			L.DomUtil.removeClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 			for (let i = 0; i < results.length; i++) this._alts.appendChild(this._createAlt(results[i], i));
-		} else L.DomUtil.addClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+			this._setListOpen(true);
+		} else {
+			this._errorElement.textContent = this.options.errorMessage;
+			L.DomUtil.addClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+		}
 	}
 	/**
 	* Mark geocode result on map
@@ -287,7 +300,9 @@ var OpenCageGeocodingControl = class extends L.Control {
 		this._container.className = this._container.className.replace(" leaflet-control-opencage-geocoding-expanded", "");
 		this._setExpanded(false);
 		L.DomUtil.addClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
+		this._setListOpen(false);
 		L.DomUtil.removeClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+		this._errorElement.textContent = "";
 	}
 	/**
 	* Tell assistive technology whether the toggle button's control is open
@@ -301,15 +316,29 @@ var OpenCageGeocodingControl = class extends L.Control {
 	_clearResults() {
 		L.DomUtil.addClass(this._alts, "leaflet-control-opencage-geocoding-alternatives-minimized");
 		this._selection = null;
+		this._setListOpen(false);
 		L.DomUtil.removeClass(this._errorElement, "leaflet-control-opencage-geocoding-error");
+		this._errorElement.textContent = "";
+	}
+	/**
+	* Tell screen readers whether the result list is showing. A closed list
+	* has no highlighted result.
+	*/
+	_setListOpen(open) {
+		this._input.setAttribute("aria-expanded", String(open));
+		if (!open) this._input.removeAttribute("aria-activedescendant");
 	}
 	/**
 	* Create alternative result element
 	*/
 	_createAlt(result, index) {
 		const li = document.createElement("li");
+		li.id = `${this._alts.id}-${index}`;
+		li.setAttribute("role", "option");
+		li.setAttribute("aria-selected", "false");
 		const a = document.createElement("a");
 		a.href = "#";
+		a.tabIndex = -1;
 		a.dataset.resultIndex = index;
 		if (this.options.showResultIcons && result.icon) try {
 			const u = new URL(result.icon, window.location.href);
@@ -334,10 +363,15 @@ var OpenCageGeocodingControl = class extends L.Control {
 		const select = (dir) => {
 			if (this._selection) {
 				L.DomUtil.removeClass(this._selection.firstChild, "leaflet-control-opencage-geocoding-selected");
+				this._selection.setAttribute("aria-selected", "false");
 				this._selection = this._selection[dir > 0 ? "nextSibling" : "previousSibling"];
 			}
 			if (!this._selection) this._selection = this._alts[dir > 0 ? "firstChild" : "lastChild"];
-			if (this._selection) L.DomUtil.addClass(this._selection.firstChild, "leaflet-control-opencage-geocoding-selected");
+			if (this._selection) {
+				L.DomUtil.addClass(this._selection.firstChild, "leaflet-control-opencage-geocoding-selected");
+				this._selection.setAttribute("aria-selected", "true");
+				this._input.setAttribute("aria-activedescendant", this._selection.id);
+			}
 		};
 		if (e.isComposing || e.keyCode === 229) return true;
 		switch (e.key) {

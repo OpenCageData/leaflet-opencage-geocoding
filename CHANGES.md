@@ -3,6 +3,7 @@
   - Remove support for Internet Explorer 11
   - Fix: stricter validation of returned data structure
   - Accessibility: convert the trigger button to an actual HTML button
+  - Accessibility: mark combobox with ARIA tags
   - Test suite: also test against node version 26, no longer version 20
   - Test suite: enforce code (and CSS and even CHANGES.md) style
   - NPM package updates: vitest
