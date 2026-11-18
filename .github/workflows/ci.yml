@@ -26,8 +26,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
+      # npm ci installs exactly what package-lock.json records, and fails if the
+      # lockfile is out of sync with package.json. If that happens, the lockfile
+      # is broken: run `npm install` locally and commit the updated lockfile.
+      # Do not switch this back to `npm install`, which silently repairs it.
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run linter
         run: npm run lint
@@ -55,7 +59,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
