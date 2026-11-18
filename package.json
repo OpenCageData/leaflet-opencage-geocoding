@@ -44,7 +44,6 @@
     "leaflet": "^1.9"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3.3",
     "@eslint/js": "10.0",
     "@vitest/coverage-v8": "5.1",
     "@vitest/ui": "5.1",

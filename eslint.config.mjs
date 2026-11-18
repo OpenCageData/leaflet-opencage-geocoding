@@ -1,21 +1,14 @@
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
 
 export default defineConfig([
+  // Build output and generated reports. Must stay in a config object of its
+  // own: an `ignores` key next to other keys only scopes that one object.
+  globalIgnores(['dist/', 'coverage/']),
+
   {
-    extends: compat.extends('eslint:recommended'),
+    extends: [js.configs.recommended],
 
     languageOptions: {
       globals: {
@@ -33,8 +26,6 @@ export default defineConfig([
       ecmaVersion: 2021,
       sourceType: 'module',
     },
-
-    ignores: ['dist/**'],
 
     rules: {
       'no-unused-vars': 'warn',
