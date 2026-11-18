@@ -5,15 +5,25 @@ import fs from 'node:fs';
 // Read package.json for banner information
 const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 
+// The banner must not depend on the build date: dist/ is committed, so a
+// date would rewrite every bundle on every rebuild. Take the copyright years
+// from LICENSE so the two cannot drift apart.
+const copyrightYears = fs
+  .readFileSync('./LICENSE', 'utf8')
+  .match(/^Copyright \(c\) ([\d-]+) /m)?.[1];
+if (!copyrightYears) {
+  throw new Error('vite.config.js: no "Copyright (c) <years>" line in LICENSE');
+}
+
 const banner = `/**
- * OpenCage Data Geocoding Control v${pkg.version} - ${new Date().toISOString().split('T')[0]}
- * Copyright (c) ${new Date().getFullYear()}, ${pkg.author.name} 
- * ${pkg.author.email} 
- * ${pkg.author.url} 
- * 
- * Licensed under the ${pkg.license} license. 
- * Demo: ${pkg.homepage} 
- * Source: ${pkg.repository.url} 
+ * OpenCage Data Geocoding Control v${pkg.version}
+ * Copyright (c) ${copyrightYears}, ${pkg.author.name}
+ * ${pkg.author.email}
+ * ${pkg.author.url}
+ *
+ * Licensed under the ${pkg.license} license.
+ * Demo: ${pkg.homepage}
+ * Source: ${pkg.repository.url}
  */
 `;
 

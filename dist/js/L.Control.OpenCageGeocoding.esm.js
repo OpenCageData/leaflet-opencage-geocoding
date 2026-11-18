@@ -1,12 +1,12 @@
 /**
- * OpenCage Data Geocoding Control v2.5.0 - 2026-11-18
- * Copyright (c) 2026, OpenCage GmbH 
- * support@opencagedata.com 
- * https://opencagedata.com 
- * 
- * Licensed under the BSD license. 
- * Demo: https://opencagedata.com 
- * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git 
+ * OpenCage Data Geocoding Control v2.5.0
+ * Copyright (c) 2020-2026, OpenCage GmbH
+ * support@opencagedata.com
+ * https://opencagedata.com
+ *
+ * Licensed under the BSD license.
+ * Demo: https://opencagedata.com
+ * Source: git@github.com:opencagedata/leaflet-opencage-geocoding.git
  */
 import L from "leaflet";
 // src/js/geocoder.js
