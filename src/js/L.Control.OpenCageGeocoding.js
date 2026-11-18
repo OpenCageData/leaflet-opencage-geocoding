@@ -22,8 +22,6 @@ export class OpenCageGeocodingControl extends L.Control {
       ...options,
     };
 
-    this._callbackId = 0;
-
     if (!this.options.geocoder) {
       this.options.geocoder = new OpenCageGeocoder(this.options);
     }

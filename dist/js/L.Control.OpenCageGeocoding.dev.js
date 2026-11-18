@@ -205,7 +205,6 @@
 				limit: 5,
 				...options
 			};
-			this._callbackId = 0;
 			if (!this.options.geocoder) this.options.geocoder = new OpenCageGeocoder(this.options);
 		}
 		onAdd(map) {
